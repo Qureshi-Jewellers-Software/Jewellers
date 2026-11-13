@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sarafa Manager Demo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap">
+<style>
+body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: app shell — side rail on desktop, bottom bar on phone; content as quiet panels, gold reserved for money totals */
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#1f1d24; --muted:#6c6874; --line:#e4e1da;
+  --accent:#6b2a4a; --accent-ink:#ffffff; --gold:#a8781c; --gold-soft:#f5ead2;
+  --good:#2f7a4f; --warn:#b5651d; --bad:#b23a3a;
+  --font-display:"Outfit",system-ui,sans-serif; --font-body:"Inter",system-ui,sans-serif;
+  --font-urdu:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141218; --panel:#1d1a22; --ink:#ece8f0; --muted:#a39dab; --line:#2f2b36;
+  --accent:#c97aa0; --accent-ink:#1a0f15; --gold:#e0b55a; --gold-soft:#3a2f18;
+  --good:#5fbf86; --warn:#e3a05a; --bad:#e57373; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --panel:#1d1a22; --ink:#ece8f0; --muted:#a39dab; --line:#2f2b36;
+  --accent:#c97aa0; --accent-ink:#1a0f15; --gold:#e0b55a; --gold-soft:#3a2f18;
+  --good:#5fbf86; --warn:#e3a05a; --bad:#e57373; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.5}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance}
+h1{font-size:1.5rem} h2{font-size:1.15rem} h3{font-size:1rem}
+.num{font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--muted);font-weight:500}
+.btn{border:0;border-radius:8px;padding:9px 14px;background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.sm{padding:5px 10px;font-size:.8rem}
+.btn.danger{background:var(--bad);color:#fff}
+.app{display:flex;min-height:100%}
+.rail{width:200px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);padding:18px 10px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.brand{padding:0 8px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.brand b{font-family:var(--font-display);font-size:1.1rem;display:block}
+.brand small{color:var(--muted);font-size:.72rem}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;border:0;background:none;cursor:pointer;text-align:left;width:100%;color:var(--muted);font-weight:500}
+.nav svg{width:18px;height:18px;flex-shrink:0}
+.nav.on{background:var(--gold-soft);color:var(--ink)}
+main{flex:1;min-width:0;padding-block:20px 90px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.top p{margin:2px 0 0;color:var(--muted);font-size:.85rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.g2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.fields{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat b{font-family:var(--font-display);font-size:1.35rem}
+.gold{color:var(--gold)}
+.rates{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rate{background:var(--gold-soft);border-radius:10px;padding:10px;text-align:center}
+.rate small{display:block;font-size:.72rem;color:var(--muted)}
+.rate b{font-family:var(--font-display);font-size:1.05rem}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.72rem;font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}
+.pill.off{background:color-mix(in srgb,var(--muted) 15%,transparent);color:var(--muted)}
+.pill.due{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.spacer{flex:1}
+.calc{display:flex;flex-direction:column;gap:6px;background:var(--bg);border-radius:10px;padding:12px}
+.calc div{display:flex;justify-content:space-between;gap:10px}
+.calc .tot{border-top:1px solid var(--line);padding-top:8px;font-weight:700;font-size:1.05rem}
+.muted{color:var(--muted)} .small{font-size:.8rem}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:5px 12px;cursor:pointer;font-size:.8rem}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.bars{display:flex;align-items:flex-end;gap:8px;height:140px;padding-top:10px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bar i{display:block;width:100%;max-width:38px;background:var(--gold);border-radius:4px 4px 0 0;min-height:2px}
+.bar small{font-size:.68rem;color:var(--muted)}
+.overlay{position:fixed;inset:0;background:rgba(10,8,14,.55);display:flex;align-items:flex-start;justify-content:center;padding:max(20px,env(safe-area-inset-top,0px)) 12px 20px;overflow:auto;z-index:50}
+.modal{background:var(--panel);border-radius:14px;width:100%;max-width:440px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.receipt{background:#fffdf8;color:#1d1a15;border-radius:8px;padding:16px;border:1px dashed #cdbf9e}
+.receipt .ur{font-family:var(--font-urdu);direction:rtl;line-height:2.1}
+.receipt h3{text-align:center;font-family:var(--font-display)}
+.receipt .line{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;border-bottom:1px dotted #d8ccb0;padding:3px 0}
+.receipt .line .ur{font-size:.85rem}
+.receipt .big{font-weight:700;font-size:.95rem}
+.login{min-height:100%;display:flex;align-items:center;justify-content:center;padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.login .panel{width:100%;max-width:340px;text-align:center}
+.demo-tag{font-size:.7rem;background:var(--gold-soft);color:var(--gold);padding:2px 8px;border-radius:99px;font-weight:600}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:.85rem;z-index:60}
+@media (max-width:760px){
+  .rail{position:fixed;top:auto;bottom:0;left:0;right:0;width:auto;height:auto;flex-direction:row;padding:6px max(4px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(4px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line);z-index:40;gap:0}
+  .brand{display:none}
+  .nav{flex-direction:column;gap:2px;padding:6px 2px;font-size:.62rem;text-align:center;justify-content:center}
+  .nav.on{background:none;color:var(--accent)}
+  .rates{gap:6px} .rate b{font-size:.92rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script>
+/* ===== CONFIG: yahan se units aur default settings badlein ===== */
+const TOLA_G = 11.664, MASHA_G = TOLA_G/12, RATTI_G = MASHA_G/8;
+const KARATS = ["24K","22K","21K"];
+const STORE_KEY = "sarafa_demo_v1";
+
+/* ===== DEMO DATA (farzi) ===== */
+function dayISO(off){const d=new Date();d.setDate(d.getDate()-off);return d.toISOString().slice(0,10)}
+function demoData(){
+  return {
+    settings:{shop:"Al-Noor Jewellers (Demo)",phone:"0300-1234567",address:"Sarafa Bazaar, Saddar, Karachi",
+      pin:"1234",rates:{"24K":430000,"22K":394200,"21K":376300},wastage:5,mazType:"gram",mazRate:1500,kaat:6},
+    stock:[
+      {tag:"R-101",name:"Ladies Ring",cat:"Ring",karat:"22K",gross:4.2,nag:0.3,sold:false},
+      {tag:"R-102",name:"Gents Ring",cat:"Ring",karat:"21K",gross:6.8,nag:0,sold:false},
+      {tag:"C-201",name:"Chain 20 inch",cat:"Chain",karat:"22K",gross:11.5,nag:0,sold:false},
+      {tag:"B-301",name:"Bangles (pair)",cat:"Bangle",karat:"21K",gross:23.3,nag:0,sold:false},
+      {tag:"E-401",name:"Jhumka Earrings",cat:"Earring",karat:"22K",gross:7.1,nag:1.2,sold:false},
+      {tag:"S-501",name:"Bridal Set",cat:"Set",karat:"22K",gross:58.4,nag:4.5,sold:false},
+      {tag:"L-601",name:"Locket",cat:"Pendant",karat:"21K",gross:3.4,nag:0.2,sold:true}
+    ],
+    customers:[
+      {id:1,name:"Ayesha Khan",phone:"0321-5550011"},
+      {id:2,name:"Bilal Ahmed",phone:"0333-5550022"},
+      {id:3,name:"Sadia Raza",phone:"0345-5550033"}
+    ],
+    ledger:[
+      {cid:1,date:dayISO(6),amt:85000,note:"Bill #1001 baqaya"},
+      {cid:1,date:dayISO(2),amt:-40000,note:"Wusooli"},
+      {cid:2,date:dayISO(4),amt:120000,note:"Bridal order advance baqi"},
+      {cid:3,date:dayISO(1),amt:-25000,note:"Advance jama"}
+    ],
+    bills:[
+      {no:1001,date:dayISO(6),cid:1,total:385000,paid:300000,gold:8.6},
+      {no:1002,date:dayISO(4),cid:2,total:210500,paid:210500,gold:4.9},
+      {no:1003,date:dayISO(3),cid:0,total:142000,paid:142000,gold:3.4},
+      {no:1004,date:dayISO(1),cid:3,total:298000,paid:298000,gold:6.9},
+      {no:1005,date:dayISO(0),cid:0,total:176400,paid:176400,gold:4.0}
+    ],
+    karigars:[{id:1,name:"Ustad Rafiq",phone:"0312-5550044"},{id:2,name:"Imran Karigar",phone:"0301-5550055"}],
+    kentries:[
+      {kid:1,date:dayISO(8),type:"issue",wt:50,karat:"22K",note:"Bridal set ke liye"},
+      {kid:1,date:dayISO(3),type:"receive",wt:46.5,wast:2.5,maz:35000,note:"Set wapas"},
+      {kid:1,date:dayISO(2),type:"pay",amt:20000,note:"Mazdoori"},
+      {kid:2,date:dayISO(5),type:"issue",wt:20,karat:"21K",note:"4 rings"},
+      {kid:2,date:dayISO(1),type:"receive",wt:10.2,wast:0.6,maz:8000,note:"2 rings"}
+    ],
+    nextBill:1006
+  };
+}
+
+/* ===== STORAGE ===== */
+let S; try{S=JSON.parse(localStorage.getItem(STORE_KEY))}catch(e){}
+if(!S||!S.settings) S=demoData();
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(S))}catch(e){}}
+let loggedIn=false, screen="home", cart=[], oldGold=null;
+
+/* ===== HELPERS ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rs=n=>"Rs "+Math.round(n).toLocaleString("en-PK");
+const g=n=>(+n).toFixed(2)+" g";
+function tmr(grams){let t=Math.floor(grams/TOLA_G),r=grams-t*TOLA_G,m=Math.floor(r/MASHA_G);r-=m*MASHA_G;const ra=(r/RATTI_G).toFixed(1);return `${t}T ${m}M ${ra}R`}
+const val=(grams,karat)=>grams/TOLA_G*S.settings.rates[karat];
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtD=d=>new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+const cust=id=>S.customers.find(c=>c.id==id);
+const custBal=id=>S.ledger.filter(l=>l.cid==id).reduce((a,b)=>a+b.amt,0);
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+const num=id=>parseFloat(($("#"+id)||{}).value)||0;
+
+/* ===== ICONS ===== */
+const I={
+ home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ bill:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+ stock:'<path d="M12 3l3 5h-6zM5 10h14l-7 11z"/>',
+ karigar:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+ khata:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 9h6M9 13h4"/>',
+ report:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'
+};
+const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
+const NAV=[["home","Dashboard"],["bill","Naya Bill"],["stock","Stock"],["karigar","Karigar"],["khata","Khata"],["report","Reports"],["settings","Settings"]];
+
+/* ===== SHELL ===== */
+function render(){
+  if(!loggedIn){
+    $("#root").innerHTML=`<div class="login"><form class="panel" onsubmit="event.preventDefault();doLogin()">
+      <h1>${esc(S.settings.shop)}</h1><span class="muted small">Sarafa Manager <span class="demo-tag">DEMO</span></span>
+      <label>PIN darj karein<input id="pin" type="password" inputmode="numeric" value="1234" autocomplete="off"></label>
+      <button class="btn">Login</button><span class="muted small">Demo PIN: 1234</span></form></div>`;return;
+  }
+  $("#root").innerHTML=`<div class="app"><nav class="rail">
+    <div class="brand"><b>${esc(S.settings.shop)}</b><small>Sarafa Manager · Demo</small></div>
+    ${NAV.map(([k,l])=>`<button class="nav ${screen==k?"on":""}" onclick="go('${k}')">${icon(k)}<span>${l}</span></button>`).join("")}
+  </nav><main><div class="wrap" id="main"></div></main></div>`;
+  ({home:Home,bill:Bill,stock:Stock,karigar:Karigar,khata:Khata,report:Report,settings:Settings})[screen]();
+}
+function go(k){screen=k;render();window.scrollTo(0,0)}
+function doLogin(){if($("#pin").value===S.settings.pin){loggedIn=true;render()}else toast("PIN ghalat hai")}
+function head(t,sub,extra=""){return `<div class="top"><div><h1>${t}</h1>${sub?`<p>${sub}</p>`:""}</div>${extra}</div>`}
+
+/* ===== DASHBOARD ===== */
+function Home(){
+  const t=today(), tb=S.bills.filter(b=>b.date==t);
+  const sale=tb.reduce((a,b)=>a+b.total,0), cash=tb.reduce((a,b)=>a+b.paid,0);
+  const inStock=S.stock.filter(s=>!s.sold), stockWt=inStock.reduce((a,s)=>a+s.gross,0);
+  const udhaar=S.customers.reduce((a,c)=>a+Math.max(0,custBal(c.id)),0);
+  $("#main").innerHTML=head("Assalam o Alaikum",new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),`<button class="btn" onclick="go('bill')">+ Naya Bill</button>`)+`
+  <section class="panel"><div class="row"><h2>Aaj ka rate</h2><span class="muted small">per tola</span><span class="spacer"></span><button class="btn ghost sm" onclick="go('settings')">Rate badlein</button></div>
+   <div class="rates">${KARATS.map(k=>`<div class="rate"><small>${k}</small><b class="num">${Math.round(S.settings.rates[k]).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
+  <section class="grid">
+   <div class="panel stat"><span>Aaj ki sale</span><b class="num gold">${rs(sale)}</b><small class="muted">${tb.length} bill</small></div>
+   <div class="panel stat"><span>Aaj ka cash</span><b class="num">${rs(cash)}</b></div>
+   <div class="panel stat"><span>Stock mein</span><b class="num">${g(stockWt)}</b><small class="muted">${inStock.length} items · ${tmr(stockWt)}</small></div>
+   <div class="panel stat"><span>Kul udhaar</span><b class="num" style="color:var(--warn)">${rs(udhaar)}</b></div>
+  </section>
+  <section class="panel"><h2>Haal ke bills</h2><div class="tbl"><table><tr><th>Bill</th><th>Date</th><th>Customer</th><th class="r">Total</th><th class="r">Baqi</th></tr>
+   ${S.bills.slice(-6).reverse().map(b=>`<tr><td>#${b.no}</td><td>${fmtD(b.date)}</td><td>${esc(cust(b.cid)?.name||"Walk-in")}</td><td class="r num">${rs(b.total)}</td><td class="r num">${b.total-b.paid>0?`<span class="pill due">${rs(b.total-b.paid)}</span>`:`<span class="pill ok">Clear</span>`}</td></tr>`).join("")}
+  </table></div></section>`;
+}
+
+/* ===== BILL ===== */
+function itemCalc(it){
+  const net=Math.max(0,it.gross-it.nag), wast=net*it.wastage/100, goldWt=net+wast;
+  const goldVal=val(goldWt,it.karat), maz=it.mazType=="gram"?net*it.mazRate:it.mazRate;
+  return {net,wast,goldWt,goldVal,maz,total:goldVal+maz+it.nagPrice};
+}
+function Bill(){
+  const st=S.settings;
+  $("#main").innerHTML=head("Naya Bill",`Bill #${S.nextBill} · ${fmtD(today())}`)+`
+  <div class="g2">
+  <section class="panel"><h2>Zewar shamil karein</h2>
+   <label>Stock se chunein (tag)<select id="bTag" onchange="pickTag()"><option value="">— Haath se likhein —</option>
+    ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross}g</option>`).join("")}</select></label>
+   <div class="fields">
+    <label>Naam<input id="bName" placeholder="e.g. Ring"></label>
+    <label>Karat<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
+    <label>Kul wazan (g)<input id="bGross" type="number" step="0.01" oninput="live()"></label>
+    <label>Nag wazan (g)<input id="bNag" type="number" step="0.01" value="0" oninput="live()"></label>
+    <label>Wastage %<input id="bWast" type="number" step="0.1" value="${st.wastage}" oninput="live()"></label>
+    <label>Mazdoori<select id="bMazType" oninput="live()"><option value="gram" ${st.mazType=="gram"?"selected":""}>Per gram</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>Fixed</option></select></label>
+    <label>Mazdoori rate (Rs)<input id="bMaz" type="number" value="${st.mazRate}" oninput="live()"></label>
+    <label>Nag qeemat (Rs)<input id="bNagP" type="number" value="0" oninput="live()"></label>
+   </div>
+   <div class="calc num" id="liveBox"></div>
+   <button class="btn" onclick="addItem()">+ Bill mein daalein</button>
+  </section>
+  <section class="panel"><h2>Bill</h2>
+   <label>Customer<select id="bCust"><option value="0">Walk-in customer</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></label>
+   <div class="tbl"><table><tr><th>Item</th><th>Wazan</th><th class="r">Rs</th><th></th></tr>
+    ${cart.length?cart.map((it,i)=>{const c=itemCalc(it);return `<tr><td>${esc(it.name)}<div class="muted small">${it.karat}${it.tag?" · "+it.tag:""}</div></td><td class="num small">${g(c.goldWt)}<div class="muted">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.total)}</td><td><button class="btn ghost sm" onclick="cart.splice(${i},1);Bill()">✕</button></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">Abhi koi item nahi. Baen taraf se shamil karein.</td></tr>`}
+   </table></div>
+   <details ${oldGold?"open":""}><summary style="cursor:pointer;font-weight:600">Purana sona (exchange)</summary>
+    <div class="fields" style="margin-top:10px">
+     <label>Wazan (g)<input id="oWt" type="number" step="0.01" value="${oldGold?.wt||""}" oninput="setOld()"></label>
+     <label>Test karat<select id="oKarat" oninput="setOld()">${KARATS.map(k=>`<option ${(oldGold?.karat||"21K")==k?"selected":""}>${k}</option>`).join("")}</select></label>
+     <label>Kaat %<input id="oKaat" type="number" step="0.1" value="${oldGold?.kaat??st.kaat}" oninput="setOld()"></label>
+    </div></details>
+   <div class="fields"><label>Discount (Rs)<input id="bDisc" type="number" value="0" oninput="totals()"></label><label>Wusool (Rs)<input id="bPaid" type="number" oninput="totals()"></label></div>
+   <div class="calc num" id="totBox"></div>
+   <button class="btn" onclick="saveBill()">Bill save karein</button>
+  </section></div>`;
+  live();totals();
+}
+function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Zewar",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
+function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s)return;$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bGross").value=s.gross;$("#bNag").value=s.nag;live()}
+function live(){const it=readItem(),c=itemCalc(it);$("#liveBox").innerHTML=`
+ <div><span>Khalis wazan</span><span>${g(c.net)}</span></div>
+ <div><span>Wastage</span><span>${g(c.wast)}</span></div>
+ <div><span>Sone ka wazan</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
+ <div><span>Sona (${it.karat} @ ${rs(S.settings.rates[it.karat])}/tola)</span><span>${rs(c.goldVal)}</span></div>
+ <div><span>Mazdoori</span><span>${rs(c.maz)}</span></div>
+ <div><span>Nag</span><span>${rs(it.nagPrice)}</span></div>
+ <div class="tot"><span>Item total</span><span class="gold">${rs(c.total)}</span></div>`}
+function addItem(){const it=readItem();if(it.gross<=0){toast("Wazan likhein");return}cart.push(it);Bill();toast("Item shamil ho gaya")}
+function setOld(){const wt=num("oWt");oldGold=wt>0?{wt,karat:$("#oKarat").value,kaat:num("oKaat")}:null;totals()}
+function oldVal(){return oldGold?val(oldGold.wt*(1-oldGold.kaat/100),oldGold.karat):0}
+function billTotals(){const sub=cart.reduce((a,it)=>a+itemCalc(it).total,0),ov=oldVal(),disc=num("bDisc");const total=Math.max(0,sub-ov-disc);const p=$("#bPaid")?.value;const paid=p===""||p==null?total:+p;return {sub,ov,disc,total,paid,baqi:total-paid}}
+function totals(){const t=billTotals();$("#totBox").innerHTML=`
+ <div><span>Items</span><span>${rs(t.sub)}</span></div>
+ ${t.ov?`<div><span>Purana sona minus</span><span>− ${rs(t.ov)}</span></div>`:""}
+ ${t.disc?`<div><span>Discount</span><span>− ${rs(t.disc)}</span></div>`:""}
+ <div class="tot"><span>Kul raqam</span><span class="gold">${rs(t.total)}</span></div>
+ <div><span>Wusool</span><span>${rs(t.paid)}</span></div>
+ <div><span>Baqi (khata mein)</span><span style="color:${t.baqi>0?"var(--warn)":"inherit"}">${rs(Math.max(0,t.baqi))}</span></div>`}
+function saveBill(){
+  if(!cart.length){toast("Pehle item shamil karein");return}
+  const t=billTotals(),cid=+$("#bCust").value;
+  if(t.baqi>0&&!cid){toast("Udhaar ke liye customer chunein");return}
+  const gold=cart.reduce((a,it)=>a+itemCalc(it).goldWt,0);
+  const bill={no:S.nextBill++,date:today(),cid,total:t.total,paid:t.paid,gold,items:cart.map(it=>({...it,calc:itemCalc(it)})),old:oldGold?{...oldGold,val:t.ov}:null,disc:t.disc,sub:t.sub};
+  S.bills.push(bill);
+  cart.forEach(it=>{const s=S.stock.find(x=>x.tag==it.tag);if(s)s.sold=true});
+  if(t.baqi>0)S.ledger.push({cid,date:today(),amt:t.baqi,note:`Bill #${bill.no} baqaya`});
+  cart=[];oldGold=null;save();Bill();showReceipt(bill);
+}
+
+/* ===== URDU RECEIPT ===== */
+function showReceipt(b){
+  const st=S.settings,c=cust(b.cid);
+  const L=(ur,en,v,cls="")=>`<div class="line ${cls}"><span><span class="ur">${ur}</span> <small style="color:#7a6f5a">${en}</small></span><span class="num">${v}</span></div>`;
+  const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
+  ov.innerHTML=`<div class="modal"><div class="row"><h2>Bill #${b.no}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">Band karein</button></div>
+  <div class="receipt"><h3>${esc(st.shop)}</h3><div style="text-align:center;font-size:.75rem;color:#7a6f5a">${esc(st.address)} · ${esc(st.phone)}</div>
+   <div class="ur" style="text-align:center;font-size:1.1rem;margin:6px 0">رسید</div>
+   ${L("گاہک","Customer",esc(c?.name||"Walk-in"))}${L("تاریخ","Date",fmtD(b.date))}
+   ${(b.items||[]).map(it=>`<div style="margin-top:8px;font-weight:600;font-size:.85rem">${esc(it.name)} · ${it.karat}</div>
+     ${L("وزن","Weight",`${g(it.calc.goldWt)} (${tmr(it.calc.goldWt)})`)}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
+   ${b.old?L("پرانا سونا","Old gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
+   ${L("کل رقم","Total",rs(b.total),"big")}${L("وصول","Received",rs(b.paid))}${L("باقی","Balance",rs(Math.max(0,b.total-b.paid)),"big")}
+   <div class="ur" style="text-align:center;margin-top:8px">خریداری کا شکریہ</div></div>
+  <p class="muted small" style="margin:0">Printer se print Phase 3 mein test hoga.</p></div>`;
+  document.body.appendChild(ov);
+}
+
+/* ===== STOCK ===== */
+let stockFilter="all";
+function Stock(){
+  const list=S.stock.filter(s=>stockFilter=="all"||(stockFilter=="in"?!s.sold:s.sold));
+  const inS=S.stock.filter(s=>!s.sold);
+  $("#main").innerHTML=head("Stock",`${inS.length} items · ${g(inS.reduce((a,s)=>a+s.gross,0))} dukaan mein`)+`
+  <section class="panel"><h2>Naya zewar</h2><div class="fields">
+   <label>Tag<input id="sTag" placeholder="R-103"></label><label>Naam<input id="sName" placeholder="Ladies Ring"></label>
+   <label>Qism<select id="sCat">${["Ring","Chain","Bangle","Earring","Set","Pendant","Other"].map(c=>`<option>${c}</option>`).join("")}</select></label>
+   <label>Karat<select id="sKarat">${KARATS.map(k=>`<option>${k}</option>`).join("")}</select></label>
+   <label>Kul wazan (g)<input id="sGross" type="number" step="0.01"></label><label>Nag wazan (g)<input id="sNag" type="number" step="0.01" value="0"></label>
+  </div><div><button class="btn" onclick="addStock()">+ Stock mein daalein</button></div></section>
+  <section class="panel"><div class="row">${[["all","Sab"],["in","Dukaan mein"],["sold","Bik gaye"]].map(([k,l])=>`<button class="chip ${stockFilter==k?"on":""}" onclick="stockFilter='${k}';Stock()">${l}</button>`).join("")}</div>
+  <div class="tbl"><table><tr><th>Tag</th><th>Naam</th><th>Karat</th><th class="r">Wazan</th><th class="r">Aaj ki qeemat</th><th>Halat</th></tr>
+   ${list.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}<div class="muted small">${esc(s.cat)}</div></td><td>${s.karat}</td><td class="r num">${g(s.gross)}<div class="muted small">${tmr(s.gross)}</div></td><td class="r num">${rs(val(s.gross-s.nag,s.karat))}</td><td>${s.sold?'<span class="pill off">Bik gaya</span>':'<span class="pill ok">Dukaan mein</span>'}</td></tr>`).join("")}
+  </table></div><p class="muted small" style="margin:0">Qeemat sirf sone ki hai (mazdoori ke baghair), aaj ke rate par.</p></section>`;
+}
+function addStock(){const tag=$("#sTag").value.trim(),gross=num("sGross");if(!tag||gross<=0){toast("Tag aur wazan likhein");return}
+  if(S.stock.some(s=>s.tag==tag)){toast("Ye tag pehle se hai");return}
+  S.stock.push({tag,name:$("#sName").value||"Zewar",cat:$("#sCat").value,karat:$("#sKarat").value,gross,nag:num("sNag"),sold:false});save();Stock();toast("Stock mein shamil")}
+
+/* ===== KARIGAR ===== */
+let selK=1;
+function kBal(id){let gold=0,cash=0;S.kentries.filter(e=>e.kid==id).forEach(e=>{if(e.type=="issue")gold+=e.wt;if(e.type=="receive"){gold-=e.wt+(e.wast||0);cash+=e.maz||0}if(e.type=="pay")cash-=e.amt});return {gold,cash}}
+function Karigar(){
+  const k=S.karigars.find(x=>x.id==selK)||S.karigars[0];if(k)selK=k.id;
+  const ents=S.kentries.filter(e=>e.kid==selK).slice().reverse();
+  $("#main").innerHTML=head("Karigar","Sona dena, zewar lena, mazdoori ka hisaab")+`
+  <section class="grid">${S.karigars.map(x=>{const b=kBal(x.id);return `<button class="panel" style="text-align:left;cursor:pointer;${x.id==selK?"border-color:var(--accent)":""}" onclick="selK=${x.id};Karigar()">
+    <h3>${esc(x.name)}</h3><span class="muted small">${esc(x.phone)}</span>
+    <div class="small num">Sona baqi: <b>${g(b.gold)}</b></div><div class="small num">Mazdoori baqi: <b>${rs(b.cash)}</b></div></button>`}).join("")}
+   <div class="panel"><h3>Naya karigar</h3><input id="kName" placeholder="Naam"><input id="kPhone" placeholder="Phone"><button class="btn sm" onclick="addK()">+ Shamil</button></div></section>
+  ${k?`<section class="panel"><h2>${esc(k.name)} — naya len-den</h2>
+   <div class="row">${[["issue","Sona diya"],["receive","Zewar liya"],["pay","Mazdoori di"]].map(([t,l])=>`<button class="chip ${kType==t?"on":""}" onclick="kType='${t}';Karigar()">${l}</button>`).join("")}</div>
+   <div class="fields">${kType=="issue"?`<label>Wazan (g)<input id="keWt" type="number" step="0.01"></label><label>Karat<select id="keK">${KARATS.map(x=>`<option>${x}</option>`).join("")}</select></label>`:
+     kType=="receive"?`<label>Zewar wazan (g)<input id="keWt" type="number" step="0.01"></label><label>Wastage (g)<input id="keW" type="number" step="0.01" value="0"></label><label>Mazdoori (Rs)<input id="keM" type="number"></label>`:
+     `<label>Raqam (Rs)<input id="keA" type="number"></label>`}
+    <label>Note<input id="keN" placeholder="Kis order ke liye"></label></div>
+   <div><button class="btn" onclick="addKE()">Save karein</button></div></section>
+  <section class="panel"><h2>Hisaab</h2><div class="tbl"><table><tr><th>Date</th><th>Kaam</th><th class="r">Sona</th><th class="r">Rs</th><th>Note</th></tr>
+   ${ents.map(e=>`<tr><td>${fmtD(e.date)}</td><td>${e.type=="issue"?'<span class="pill due">Sona diya</span>':e.type=="receive"?'<span class="pill ok">Zewar liya</span>':'<span class="pill off">Payment</span>'}</td>
+    <td class="r num">${e.type=="issue"?"+"+g(e.wt)+" "+e.karat:e.type=="receive"?"−"+g(e.wt)+(e.wast?`<div class="muted small">wastage ${g(e.wast)}</div>`:""):"—"}</td>
+    <td class="r num">${e.type=="receive"?rs(e.maz||0):e.type=="pay"?"−"+rs(e.amt):"—"}</td><td class="small">${esc(e.note)}</td></tr>`).join("")}
+  </table></div></section>`:""}`;
+}
+let kType="issue";
+function addK(){const n=$("#kName").value.trim();if(!n)return toast("Naam likhein");const id=Math.max(0,...S.karigars.map(k=>k.id))+1;S.karigars.push({id,name:n,phone:$("#kPhone").value});selK=id;save();Karigar()}
+function addKE(){const e={kid:selK,date:today(),type:kType,note:$("#keN").value};
+  if(kType=="issue"){e.wt=num("keWt");e.karat=$("#keK").value;if(!e.wt)return toast("Wazan likhein")}
+  if(kType=="receive"){e.wt=num("keWt");e.wast=num("keW");e.maz=num("keM");if(!e.wt)return toast("Wazan likhein")}
+  if(kType=="pay"){e.amt=num("keA");if(!e.amt)return toast("Raqam likhein")}
+  S.kentries.push(e);save();Karigar();toast("Save ho gaya")}
+
+/* ===== KHATA ===== */
+let selC=null;
+function Khata(){
+  const c=selC&&cust(selC);
+  $("#main").innerHTML=head("Customer Khata","Udhaar, advance aur wusooli")+`
+  <div class="g2"><section class="panel"><h2>Customers</h2><div class="tbl"><table><tr><th>Naam</th><th class="r">Balance</th></tr>
+   ${S.customers.map(x=>{const b=custBal(x.id);return `<tr style="cursor:pointer" onclick="selC=${x.id};Khata()"><td><b>${esc(x.name)}</b><div class="muted small">${esc(x.phone)}</div></td><td class="r num">${b>0?`<span class="pill due">Lena ${rs(b)}</span>`:b<0?`<span class="pill ok">Advance ${rs(-b)}</span>`:'<span class="pill off">Clear</span>'}</td></tr>`}).join("")}
+  </table></div>
+  <div class="fields"><label>Naya customer<input id="cName" placeholder="Naam"></label><label>Phone<input id="cPhone" placeholder="03xx"></label></div><div><button class="btn sm" onclick="addC()">+ Shamil</button></div></section>
+  <section class="panel">${c?`<h2>${esc(c.name)}</h2><div class="stat"><span>Balance</span><b class="num ${custBal(c.id)>0?"":"gold"}">${rs(custBal(c.id))}</b></div>
+   <div class="fields"><label>Raqam (Rs)<input id="lAmt" type="number"></label><label>Note<input id="lNote" placeholder="Wusooli / advance"></label></div>
+   <div class="row"><button class="btn sm" onclick="addL(-1)">Wusool kiya / Advance</button><button class="btn ghost sm" onclick="addL(1)">Udhaar diya</button></div>
+   <div class="tbl"><table><tr><th>Date</th><th>Note</th><th class="r">Rs</th></tr>${S.ledger.filter(l=>l.cid==c.id).slice().reverse().map(l=>`<tr><td>${fmtD(l.date)}</td><td>${esc(l.note)}</td><td class="r num" style="color:${l.amt>0?"var(--warn)":"var(--good)"}">${l.amt>0?"+":"−"}${rs(Math.abs(l.amt))}</td></tr>`).join("")}</table></div>`
+   :`<h2>Customer chunein</h2><p class="muted">Baen taraf list se kisi customer par tap karein, uska poora khata yahan dikhega.</p>`}</section></div>`;
+}
+function addC(){const n=$("#cName").value.trim();if(!n)return toast("Naam likhein");const id=Math.max(0,...S.customers.map(c=>c.id))+1;S.customers.push({id,name:n,phone:$("#cPhone").value});selC=id;save();Khata()}
+function addL(sign){const a=num("lAmt");if(!a)return toast("Raqam likhein");S.ledger.push({cid:selC,date:today(),amt:sign*a,note:$("#lNote").value||(sign<0?"Wusooli":"Udhaar")});save();Khata();toast("Save ho gaya")}
+
+/* ===== REPORTS ===== */
+function Report(){
+  const days=[...Array(7)].map((_,i)=>dayISO(6-i));
+  const per=days.map(d=>S.bills.filter(b=>b.date==d).reduce((a,b)=>a+b.total,0)),max=Math.max(1,...per);
+  const wk=S.bills.filter(b=>days.includes(b.date));
+  $("#main").innerHTML=head("Reports","Pichle 7 din")+`
+  <section class="grid">
+   <div class="panel stat"><span>Kul sale</span><b class="num gold">${rs(wk.reduce((a,b)=>a+b.total,0))}</b></div>
+   <div class="panel stat"><span>Cash aaya</span><b class="num">${rs(wk.reduce((a,b)=>a+b.paid,0))}</b></div>
+   <div class="panel stat"><span>Sona bika</span><b class="num">${g(wk.reduce((a,b)=>a+(b.gold||0),0))}</b></div>
+   <div class="panel stat"><span>Bills</span><b class="num">${wk.length}</b></div></section>
+  <section class="panel"><h2>Roz ki sale</h2><div class="bars">${days.map((d,i)=>`<div class="bar" title="${rs(per[i])}"><small class="num">${per[i]?Math.round(per[i]/1000)+"k":""}</small><i style="height:${per[i]/max*100}%"></i><small>${fmtD(d)}</small></div>`).join("")}</div></section>
+  <section class="panel"><h2>Karigar ke paas sona</h2><div class="tbl"><table><tr><th>Karigar</th><th class="r">Sona baqi</th><th class="r">Mazdoori baqi</th></tr>${S.karigars.map(k=>{const b=kBal(k.id);return `<tr><td>${esc(k.name)}</td><td class="r num">${g(b.gold)}</td><td class="r num">${rs(b.cash)}</td></tr>`}).join("")}</table></div></section>`;
+}
+
+/* ===== SETTINGS ===== */
+function Settings(){const st=S.settings;
+  $("#main").innerHTML=head("Settings","Har shop apni marzi se badal sakti hai")+`
+  <section class="panel"><h2>Dukaan</h2><div class="fields">
+   <label>Dukaan ka naam<input id="stShop" value="${esc(st.shop)}"></label><label>Phone<input id="stPhone" value="${esc(st.phone)}"></label>
+   <label>Pata<input id="stAddr" value="${esc(st.address)}"></label><label>PIN<input id="stPin" value="${esc(st.pin)}"></label></div></section>
+  <section class="panel"><h2>Aaj ka rate (per tola)</h2><div class="fields">${KARATS.map(k=>`<label>${k}<input id="r${k}" type="number" value="${st.rates[k]}"></label>`).join("")}</div>
+   <div><button class="btn ghost sm" onclick="autoRates()">24K se baqi khud nikalein</button></div></section>
+  <section class="panel"><h2>Hisaab ke qaide</h2><div class="fields">
+   <label>Default wastage %<input id="stW" type="number" step="0.1" value="${st.wastage}"></label>
+   <label>Mazdoori tareeqa<select id="stMT"><option value="gram" ${st.mazType=="gram"?"selected":""}>Per gram</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>Fixed per item</option></select></label>
+   <label>Mazdoori rate (Rs)<input id="stMR" type="number" value="${st.mazRate}"></label>
+   <label>Purane sone par kaat %<input id="stK" type="number" step="0.1" value="${st.kaat}"></label></div></section>
+  <div class="row"><button class="btn" onclick="saveSet()">Settings save karein</button><span class="spacer"></span>
+   <button class="btn ghost sm" onclick="resetAsk(this)">Demo data dobara bharein</button></div>`;
+}
+function autoRates(){const r=num("r24K");$("#r22K").value=Math.round(r*22/24/100)*100;$("#r21K").value=Math.round(r*21/24/100)*100}
+function saveSet(){const st=S.settings;st.shop=$("#stShop").value;st.phone=$("#stPhone").value;st.address=$("#stAddr").value;st.pin=$("#stPin").value||"1234";
+  KARATS.forEach(k=>st.rates[k]=num("r"+k));st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");save();render();toast("Settings save ho gayin")}
+function resetAsk(b){if(b.dataset.c){S=demoData();cart=[];oldGold=null;save();render();toast("Demo data wapas aa gaya")}else{b.dataset.c=1;b.textContent="Pakka? Dobara dabayein";b.classList.add("danger")}}
+
+render();
+</script>
+
+</body>
+</html>
