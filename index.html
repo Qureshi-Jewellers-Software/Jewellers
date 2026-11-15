@@ -223,7 +223,9 @@ function Home(){
   const udhaar=S.customers.reduce((a,c)=>a+Math.max(0,custBal(c.id)),0);
   $("#main").innerHTML=head("Assalam o Alaikum",new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),`<button class="btn" onclick="go('bill')">+ New Bill</button>`)+`
   <section class="panel"><div class="row"><h2>Aaj ka rate</h2><span class="muted small">per tola</span><span class="spacer"></span><button class="btn ghost sm" onclick="go('settings')">Rate badlein</button></div>
-   <div class="rates">${KARATS.map(k=>`<div class="rate"><small>${k}</small><b class="num">${rateOf(k).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
+   <div class="rates">${KARATS.map(k=>`<div class="rate"><small>${k}</small><b class="num">${rateOf(k).toLocaleString("en-PK")}</b></div>`).join("")}</div>
+   <div class="row"><span class="muted small">per gram</span></div>
+   <div class="rates" style="grid-template-columns:repeat(2,1fr)">${["22K","21K"].map(k=>`<div class="rate"><small>${k} · per gram</small><b class="num">${Math.round(rateOf(k)/TOLA_G).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
   <section class="grid">
    <div class="panel stat"><span>Aaj ki sale</span><b class="num gold">${rs(sale)}</b><small class="muted">${tb.length} bill</small></div>
    <div class="panel stat"><span>Aaj ka cash</span><b class="num">${rs(cash)}</b></div>
