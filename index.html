@@ -432,9 +432,9 @@ function Stock(){
   const inS=S.stock.filter(s=>!s.sold);
   $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · <span class="num">${g(inS.reduce((a,s)=>a+s.gross,0))}</span>`,`<button class="btn" onclick="stockPreview()">${t("fullReport")}</button>`)+`
   <section class="panel"><h2>${t("newStock")}</h2><div class="fields">
-   <label>${t("tag")} <small class="muted">${t("autoTag")}</small><input id="sTag" placeholder="R001"></label>
-   <label>${t("category")}<span class="row" style="flex-wrap:nowrap"><select id="sCat" onchange="autoTag()">${allCats().map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select><button type="button" class="btn sm" style="flex-shrink:0;padding:8px 12px" title="${t("addCat")}" aria-label="${t("addCat")}" onclick="$('#catBox').hidden=!$('#catBox').hidden;$('#newCat').focus()">+</button></span>
+      <label>${t("category")}<span class="row" style="flex-wrap:nowrap"><select id="sCat" onchange="autoTag()">${allCats().map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select><button type="button" class="btn sm" style="flex-shrink:0;padding:8px 12px" title="${t("addCat")}" aria-label="${t("addCat")}" onclick="$('#catBox').hidden=!$('#catBox').hidden;$('#newCat').focus()">+</button></span>
     <span id="catBox" class="row" style="flex-wrap:nowrap" hidden><input id="newCat" placeholder="${t("newCatPh")}" onkeydown="if(event.key=='Enter'){event.preventDefault();addCat()}"><button type="button" class="btn sm" style="flex-shrink:0" onclick="addCat()">${t("save")}</button></span></label>
+   <label>${t("tag")}<input id="sTag" placeholder="R001"></label>
    <label>${t("karat")}<select id="sKarat" oninput="stockLive()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
    <label>${t("gross")}<input id="sGross" type="number" step="0.01" oninput="stockLive()"></label><label>${t("stoneWt")}<input id="sNag" type="number" step="0.01" value="0" oninput="stockLive()"></label>
    <label>${t("wastagePct")}<input id="sWast" type="number" step="0.1" value="${st.wastage}" oninput="stockLive()"></label>
