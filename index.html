@@ -125,7 +125,7 @@ html[lang="ur"] .lang{font-family:var(--font-body)}
 /* ===== CONFIG: units and default settings ===== */
 const TOLA_G = 11.664, MASHA_G = TOLA_G/12, RATTI_G = MASHA_G/8;
 const KARATS = ["24K","22K","21K"];
-const STORE_KEY = "sarafa_demo_v1";
+const STORE_KEY = "sarafa_demo_v2";
 const LANG_KEY = "sarafa_lang";
 
 /* ===== LANGUAGE: [English, Urdu] — add or edit wording here ===== */
@@ -198,13 +198,13 @@ function demoData(){
     settings:{shop:"Al-Noor Jewellers (Demo)",phone:"0300-1234567",address:"Sarafa Bazaar, Saddar, Karachi",
       pin:"1234",rates:{"24K":430000,"22K":394200,"21K":376300},wastage:5,mazType:"gram",mazRate:1500,kaat:6},
     stock:[
-      {tag:"R-101",name:"Ladies Ring",cat:"Ring",karat:"22K",gross:4.2,nag:0.3,sold:false},
-      {tag:"R-102",name:"Gents Ring",cat:"Ring",karat:"21K",gross:6.8,nag:0,sold:false},
-      {tag:"C-201",name:"Chain 20 inch",cat:"Chain",karat:"22K",gross:11.5,nag:0,sold:false},
-      {tag:"B-301",name:"Bangles (pair)",cat:"Bangle",karat:"21K",gross:23.3,nag:0,sold:false},
-      {tag:"E-401",name:"Jhumka Earrings",cat:"Earring",karat:"22K",gross:7.1,nag:1.2,sold:false},
-      {tag:"S-501",name:"Bridal Set",cat:"Set",karat:"22K",gross:58.4,nag:4.5,sold:false},
-      {tag:"L-601",name:"Locket",cat:"Pendant",karat:"21K",gross:3.4,nag:0.2,sold:true}
+      {tag:"R001",name:"Ladies Ring",cat:"Ring",karat:"22K",gross:4.2,nag:0.3,sold:false},
+      {tag:"R002",name:"Gents Ring",cat:"Ring",karat:"21K",gross:6.8,nag:0,sold:false},
+      {tag:"C001",name:"Chain 20 inch",cat:"Chain",karat:"22K",gross:11.5,nag:0,sold:false},
+      {tag:"B001",name:"Bangles (pair)",cat:"Bangle",karat:"21K",gross:23.3,nag:0,sold:false},
+      {tag:"E001",name:"Jhumka Earrings",cat:"Earring",karat:"22K",gross:7.1,nag:1.2,sold:false},
+      {tag:"S001",name:"Bridal Set",cat:"Set",karat:"22K",gross:58.4,nag:4.5,sold:false},
+      {tag:"P001",name:"Locket",cat:"Pendant",karat:"21K",gross:3.4,nag:0.2,sold:true}
     ],
     customers:[
       {id:1,name:"Ayesha Khan",phone:"0321-5550011"},
@@ -429,7 +429,7 @@ function Stock(){
   const inS=S.stock.filter(s=>!s.sold);
   $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · ${g(inS.reduce((a,s)=>a+s.gross,0))} ${t("inShop")}`,`<button class="btn" onclick="stockPreview()">${t("fullReport")}</button>`)+`
   <section class="panel"><h2>${t("newStock")}</h2><div class="fields">
-   <label>${t("tag")} <small class="muted">${t("autoTag")}</small><input id="sTag" placeholder="R-103"></label>
+   <label>${t("tag")} <small class="muted">${t("autoTag")}</small><input id="sTag" placeholder="R001"></label>
    <label>${t("category")}<span class="row" style="flex-wrap:nowrap"><select id="sCat" onchange="autoTag()">${allCats().map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select><button type="button" class="btn sm" style="flex-shrink:0;padding:8px 12px" title="${t("addCat")}" aria-label="${t("addCat")}" onclick="$('#catBox').hidden=!$('#catBox').hidden;$('#newCat').focus()">+</button></span>
     <span id="catBox" class="row" style="flex-wrap:nowrap" hidden><input id="newCat" placeholder="${t("newCatPh")}" onkeydown="if(event.key=='Enter'){event.preventDefault();addCat()}"><button type="button" class="btn sm" style="flex-shrink:0" onclick="addCat()">${t("save")}</button></span></label>
    <label>${t("karat")}<select id="sKarat" oninput="stockLive()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
@@ -445,10 +445,11 @@ function Stock(){
   </table></div><p class="muted small" style="margin:0">${t("valueNote")}</p></section>`;
   autoTag();stockLive();
 }
-/* Tag = first letter of category + next number, e.g. Chain -> C-202 */
+/* Tag = first letter of category + 3-digit sequence, e.g. Chain -> C001, C002 */
 function nextTag(cat){const p=(String(cat).trim()[0]||"X").toUpperCase();
-  const nums=S.stock.map(s=>String(s.tag).toUpperCase()).filter(x=>x.startsWith(p+"-")).map(x=>parseInt(x.slice(2))||0);
-  return p+"-"+(nums.length?Math.max(...nums)+1:101)}
+  const re=new RegExp("^"+p.replace(/[^A-Z0-9]/g,"\\$&")+"(\\d+)$");
+  const nums=S.stock.map(s=>String(s.tag).toUpperCase().match(re)).filter(Boolean).map(m=>parseInt(m[1]));
+  return p+String((nums.length?Math.max(...nums):0)+1).padStart(3,"0")}
 function autoTag(){const el=$("#sTag");if(el)el.value=nextTag($("#sCat").value)}
 function addCat(){const n=$("#newCat").value.trim();if(!n)return toast(t("enterName"));
   if(allCats().some(c=>c.toLowerCase()==n.toLowerCase()||catName(c)==n))return toast(t("catExists"));
