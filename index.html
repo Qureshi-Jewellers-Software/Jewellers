@@ -127,6 +127,7 @@ html[lang="ur"] .lang{font-family:var(--font-body)}
 /* ===== CONFIG: units and default settings ===== */
 const TOLA_G = 11.664, MASHA_G = TOLA_G/12, RATTI_G = MASHA_G/8;
 const KARATS = ["24K","22K","21K"];
+const DEFAULT_KARAT = "21K"; /* most work is in 21K */
 const STORE_KEY = "sarafa_demo_v2";
 const LANG_KEY = "sarafa_lang";
 
@@ -331,7 +332,7 @@ function Bill(){
     ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross}g</option>`).join("")}</select></label>
    <div class="fields">
     <label>${t("itemName")}<input id="bName" placeholder="e.g. Ring"></label>
-    <label>${t("karat")}<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
+    <label>${t("karat")}<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
     <label>${t("gross")}<input id="bGross" type="number" step="0.01" oninput="live()"></label>
     <label>${t("stoneWt")}<input id="bNag" type="number" step="0.01" value="0" oninput="live()"></label>
     <label>${t("wastagePct")}<input id="bWast" type="number" step="0.1" value="${st.wastage}" oninput="live()"></label>
@@ -350,7 +351,7 @@ function Bill(){
    <details ${oldGold?"open":""}><summary style="cursor:pointer;font-weight:600">${t("oldGold")}</summary>
     <div class="fields" style="margin-top:10px">
      <label>${t("weightG")}<input id="oWt" type="number" step="0.01" value="${oldGold?.wt||""}" oninput="setOld()"></label>
-     <label>${t("testKarat")}<select id="oKarat" oninput="setOld()">${KARATS.map(k=>`<option ${(oldGold?.karat||"21K")==k?"selected":""}>${k}</option>`).join("")}</select></label>
+     <label>${t("testKarat")}<select id="oKarat" oninput="setOld()">${KARATS.map(k=>`<option ${(oldGold?.karat||DEFAULT_KARAT)==k?"selected":""}>${k}</option>`).join("")}</select></label>
      <label>${t("deduction")}<input id="oKaat" type="number" step="0.1" value="${oldGold?.kaat??st.kaat}" oninput="setOld()"></label>
     </div></details>
    <div class="fields"><label>${t("discountRs")}<input id="bDisc" type="number" value="0" oninput="totals()"></label><label>${t("receivedRs")}<input id="bPaid" type="number" oninput="totals()"></label></div>
@@ -434,7 +435,7 @@ function Stock(){
    <label>${t("tag")} <small class="muted">${t("autoTag")}</small><input id="sTag" placeholder="R001"></label>
    <label>${t("category")}<span class="row" style="flex-wrap:nowrap"><select id="sCat" onchange="autoTag()">${allCats().map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select><button type="button" class="btn sm" style="flex-shrink:0;padding:8px 12px" title="${t("addCat")}" aria-label="${t("addCat")}" onclick="$('#catBox').hidden=!$('#catBox').hidden;$('#newCat').focus()">+</button></span>
     <span id="catBox" class="row" style="flex-wrap:nowrap" hidden><input id="newCat" placeholder="${t("newCatPh")}" onkeydown="if(event.key=='Enter'){event.preventDefault();addCat()}"><button type="button" class="btn sm" style="flex-shrink:0" onclick="addCat()">${t("save")}</button></span></label>
-   <label>${t("karat")}<select id="sKarat" oninput="stockLive()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
+   <label>${t("karat")}<select id="sKarat" oninput="stockLive()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
    <label>${t("gross")}<input id="sGross" type="number" step="0.01" oninput="stockLive()"></label><label>${t("stoneWt")}<input id="sNag" type="number" step="0.01" value="0" oninput="stockLive()"></label>
    <label>${t("wastagePct")}<input id="sWast" type="number" step="0.1" value="${st.wastage}" oninput="stockLive()"></label>
    <label>${t("making")}<select id="sMazType" oninput="stockLive()"><option value="gram" ${st.mazType=="gram"?"selected":""}>${t("perGramOpt")}</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>${t("fixed")}</option></select></label>
@@ -504,7 +505,7 @@ function Karigar(){
    <div class="panel"><h3>${t("newKarigar")}</h3><input id="kName" placeholder="${t("name")}"><input id="kPhone" placeholder="${t("phone")}"><button class="btn sm" onclick="addK()">${t("add")}</button></div></section>
   ${k?`<section class="panel"><h2>${t("newEntry",esc(k.name))}</h2>
    <div class="row">${["issue","receive","pay"].map(x=>`<button class="chip ${kType==x?"on":""}" onclick="kType='${x}';Karigar()">${t(x)}</button>`).join("")}</div>
-   <div class="fields">${kType=="issue"?`<label>${t("weightG")}<input id="keWt" type="number" step="0.01"></label><label>${t("karat")}<select id="keK">${KARATS.map(x=>`<option>${x}</option>`).join("")}</select></label>`:
+   <div class="fields">${kType=="issue"?`<label>${t("weightG")}<input id="keWt" type="number" step="0.01"></label><label>${t("karat")}<select id="keK">${KARATS.map(x=>`<option ${x==DEFAULT_KARAT?"selected":""}>${x}</option>`).join("")}</select></label>`:
      kType=="receive"?`<label>${t("jewWt")}<input id="keWt" type="number" step="0.01"></label><label>${t("wastG")}<input id="keW" type="number" step="0.01" value="0"></label><label>${t("makingRs")}<input id="keM" type="number"></label>`:
      `<label>${t("amountRs")}<input id="keA" type="number"></label>`}
     <label>${t("note")}<input id="keN" placeholder="${t("notePh")}"></label></div>
