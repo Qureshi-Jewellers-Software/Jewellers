@@ -117,6 +117,15 @@ td.r,th.r{text-align:end}
 .rsec .tbl{padding:0 8px 8px}
 .rfilter{display:flex;gap:6px;padding:0 8px 8px}.rfilter input,.rfilter select{background:#fff;color:#1d1a15;border-color:#e3d8bf;padding:7px 9px}.rfilter input{flex:1;min-width:0}.rfilter select{width:auto;max-width:45%}
 .rsec td.num{white-space:nowrap}.rsec summary::after{margin-top:-4px}.rsec[open] summary::after{margin-top:4px}
+.schart{display:flex;flex-direction:column;gap:10px}
+.srow{display:grid;grid-template-columns:90px 1fr auto auto;align-items:center;gap:10px}
+.sname{font-weight:600;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.strack{display:flex;height:14px;background:var(--bg);border-radius:99px;overflow:hidden;min-width:0}
+.sin{background:var(--gold)}.ssold{background:repeating-linear-gradient(45deg,var(--line),var(--line) 4px,transparent 4px,transparent 8px)}
+.sval{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.legend{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:var(--muted)}.sw{display:inline-block;width:12px;height:10px;border-radius:3px}.sw.in{background:var(--gold)}.sw.sold{background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);border:1px solid var(--line);margin-inline-start:6px}
+@media (max-width:560px){.srow{grid-template-columns:72px 1fr auto}.srow .sval{display:none}}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
 html[dir="rtl"] .num{unicode-bidi:plaintext}
@@ -160,7 +169,7 @@ const TX={
  oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (gm)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
- itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
+ itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], stockLevel:["Stock Level by Category","قسم کے لحاظ سے اسٹاک"], legIn:["In stock","اسٹاک میں"], legSold:["Sold","فروخت شدہ"], lvOut:["Out of stock","ختم"], lvLow:["Low — reorder","کم — خریداری کریں"], lvOk:["Enough stock","کافی اسٹاک"], lvNote:["Low = {0} items or fewer left (change in Settings). Bar length = weight in grams.","کم = {0} یا اس سے کم آئٹم باقی (سیٹنگز میں تبدیل کریں)۔ پٹی کی لمبائی = وزن (گرام)۔"], lowLimitL:["Low stock alert (items)","کم اسٹاک الرٹ (آئٹمز)"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
  wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
  makingPerGram:["Making ({0} × {1}/gm)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (total)","مزدوری (ٹوٹل)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
@@ -452,6 +461,7 @@ function Stock(){
    <label>${t("makingRate")}<input id="sMaz" type="number" value="" placeholder="0" oninput="stockLive()"></label>
   </div><div class="calc num" id="stockCalc"></div>
   <div class="row"><button class="btn" onclick="addStock()">${t("addToStock")}</button></div></section>
+  ${stockChart()}
   <section class="panel"><div class="row">${[["all","all"],["in","inShopF"],["sold","soldF"]].map(([k,l])=>`<button class="chip ${stockFilter==k?"on":""}" onclick="stockFilter='${k}';Stock()">${t(l)}</button>`).join("")}</div>
   <div class="tbl"><table><tr><th>${t("tag")}</th><th>${t("itemName")}</th><th>${t("karat")}</th><th class="r">${t("weight")}</th><th class="r">${t("makingCol")}</th><th class="r">${t("valueToday")}</th><th>${t("status")}</th></tr>
    ${list.map(s=>{const x=stockItem(s),c=itemCalc(x);return `<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name==s.cat?catName(s.cat):s.name)}${s.name==s.cat?"":`<div class="muted small">${esc(catName(s.cat))}</div>`}</td><td>${s.karat}</td><td class="r num"><b>${g(c.goldWt)}</b><div class="muted small">${t("netShort")} ${g(c.net)} + ${t("wastShort")} ${g(c.wast)} (${x.wastage}%)</div><div class="muted small">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.maz)}<div class="muted small">${x.mazType=="gram"?rs(x.mazRate)+"/gm":t("fixed")}</div></td><td class="r num">${rs(c.goldVal)}</td><td>${s.sold?`<span class="pill off">${t("soldF")}</span>`:`<span class="pill ok">${t("inShopF")}</span>`}</td></tr>`}).join("")}
@@ -474,6 +484,19 @@ function addStock(){const f=readStockForm();if(!f.tag||f.gross<=0){toast(t("tagW
   delete f.nagPrice;S.stock.push({...f,sold:false});save();Stock();toast(t("addedStock")+": "+f.tag)}
 
 /* ===== STOCK REPORT (full preview) ===== */
+/* Stock level chart: per category, in-stock vs sold weight */
+const lowLimit=()=>S.settings.lowLimit??2;
+function stockChart(){
+  const cats=[...new Set(S.stock.map(s=>s.cat))];
+  const rows=cats.map(c=>{const a=S.stock.filter(s=>s.cat==c),i=a.filter(s=>!s.sold),d=a.filter(s=>s.sold);
+    return {c,inN:i.length,inW:i.reduce((x,s)=>x+s.gross,0),soldN:d.length,soldW:d.reduce((x,s)=>x+s.gross,0)}}).sort((a,b)=>a.inN-b.inN||a.inW-b.inW);
+  const max=Math.max(1,...rows.map(r=>r.inW+r.soldW));
+  const lv=r=>r.inN==0?["bad",t("lvOut")]:r.inN<=lowLimit()?["due",t("lvLow")]:["ok",t("lvOk")];
+  return `<section class="panel"><div class="row"><h2>${t("stockLevel")}</h2><span class="spacer"></span><span class="legend"><i class="sw in"></i>${t("legIn")}<i class="sw sold"></i>${t("legSold")}</span></div>
+  <div class="schart">${rows.map(r=>{const [k,l]=lv(r);return `<div class="srow"><div class="sname">${esc(catName(r.c))}</div>
+   <div class="strack"><span class="sin" style="width:${r.inW/max*100}%"></span><span class="ssold" style="width:${r.soldW/max*100}%"></span></div>
+   <div class="sval num">${r.inN} ${t("items")} · ${g(r.inW)}</div><span class="pill ${k}">${l}</span></div>`}).join("")}</div>
+  <p class="muted small" style="margin:0">${t("lvNote",lowLimit())}</p></section>`}
 /* Sort by tag: letter first, then number (R001, R002, R010 ...) */
 function tagKey(tag){const m=String(tag).toUpperCase().match(/^([A-Z]*)-?(\d*)/);return [m[1]||"",parseInt(m[2]||"0")]}
 function sortByTag(list){return list.slice().sort((a,b)=>{const x=tagKey(a.tag),y=tagKey(b.tag);return x[0]<y[0]?-1:x[0]>y[0]?1:x[1]-y[1]})}
@@ -582,13 +605,14 @@ function Settings(){const st=S.settings;
    <label>${t("defWastage")}<input id="stW" type="number" step="0.1" value="${st.wastage}"></label>
    <label>${t("makingMethod")}<select id="stMT"><option value="gram" ${st.mazType=="gram"?"selected":""}>${t("perGramOpt")}</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>${t("fixedItem")}</option></select></label>
    <label>${t("makingRate")}<input id="stMR" type="number" value="${st.mazRate}"></label>
-   <label>${t("oldKaat")}<input id="stK" type="number" step="0.1" value="${st.kaat}"></label></div></section>
+   <label>${t("oldKaat")}<input id="stK" type="number" step="0.1" value="${st.kaat}"></label>
+   <label>${t("lowLimitL")}<input id="stLow" type="number" min="0" step="1" value="${lowLimit()}"></label></div></section>
   <div class="row"><button class="btn" onclick="saveSet()">${t("saveSettings")}</button><span class="spacer"></span>
    <button class="btn ghost sm" onclick="resetAsk(this)">${t("resetDemo")}</button></div>`;
 }
 function autoRates(){const r=num("r24K");KARATS.forEach(k=>{if(k!="24K")$("#r"+k).value=Math.round(r*parseInt(k)/24)})}
 function saveSet(){const st=S.settings;st.shop=$("#stShop").value;st.phone=$("#stPhone").value;st.address=$("#stAddr").value;st.pin=$("#stPin").value||"1234";
-  st.rates["24K"]=num("r24K");st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");save();render();toast(t("settingsSaved"))}
+  st.rates["24K"]=num("r24K");st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");st.lowLimit=Math.max(0,Math.round(num("stLow")));save();render();toast(t("settingsSaved"))}
 function resetAsk(b){if(b.dataset.c){S=demoData();cart=[];oldGold=null;save();render();toast(t("demoRestored"))}else{b.dataset.c=1;b.textContent=t("sure");b.classList.add("danger")}}
 
 render();
