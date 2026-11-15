@@ -104,6 +104,8 @@ td.r,th.r{text-align:end}
   .nav.on{background:none;color:var(--accent)}
   .rates{gap:6px} .rate b{font-size:.92rem}
 }
+.ratepill{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--gold);background:var(--gold-soft);color:var(--ink);border-radius:99px;padding:5px 14px;cursor:pointer;font-family:var(--font-body)}
+.ratepill span{font-size:.75rem;font-weight:700;color:var(--gold)}.ratepill b{font-size:1rem}.ratepill small{font-size:.72rem;color:var(--muted)}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
 html[dir="rtl"] .num{unicode-bidi:plaintext}
@@ -287,7 +289,8 @@ function render(){
 }
 function go(k){screen=k;render();window.scrollTo(0,0)}
 function doLogin(){if($("#pin").value===S.settings.pin){loggedIn=true;render()}else toast(t("wrongPin"))}
-function head(title,sub,extra=""){return `<div class="top"><div><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div><div class="row">${extra}${langBtn()}</div></div>`}
+const ratePill=()=>`<button class="ratepill" onclick="go('settings')" title="${t("updateRate")}"><span>24K</span><b class="num">Rs ${rateOf("24K").toLocaleString("en-PK")}</b><small>${t("perTola")}</small></button>`;
+function head(title,sub,extra=""){return `<div class="row" style="justify-content:flex-end">${ratePill()}</div><div class="top"><div><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div><div class="row">${extra}${langBtn()}</div></div>`}
 
 /* ===== DASHBOARD ===== */
 function Home(){
