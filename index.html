@@ -135,7 +135,7 @@ const TX={
  brandSub:["Sarafa Manager · Demo","صرافہ مینیجر · ڈیمو"],
  enterPin:["Enter PIN","پن درج کریں"], login:["Log in","لاگ ان"], demoPin:["Demo PIN: 1234","ڈیمو پن: 1234"], wrongPin:["Incorrect PIN","غلط پن"],
  greeting:["Welcome","السلام علیکم"],
- todayRate:["Today's Gold Rate","آج کا سونے کا ریٹ"], perTola:["per tola","فی تولہ"], perGram:["per gram","فی گرام"], updateRate:["Update rate","ریٹ تبدیل کریں"],
+ todayRate:["Today's Gold Rate","آج کا سونے کا ریٹ"], perTola:["per tola","فی تولہ"], pillLabel:["Per Tola · Today's Rate","فی تولہ · آج کا ریٹ"], perGram:["per gram","فی گرام"], updateRate:["Update rate","ریٹ تبدیل کریں"],
  todaySales:["Today's Sales","آج کی سیل"], todayCash:["Cash Received Today","آج وصول شدہ رقم"], inStock:["In Stock","اسٹاک میں"],
  viewStock:["View full stock →","مکمل اسٹاک دیکھیں ←"], receivables:["Total Receivables","کل واجب الوصول"],
  recentBills:["Recent Bills","حالیہ بل"], bill:["Bill","بل"], bills:["bills","بل"], date:["Date","تاریخ"], customer:["Customer","گاہک"],
@@ -289,8 +289,8 @@ function render(){
 }
 function go(k){screen=k;render();window.scrollTo(0,0)}
 function doLogin(){if($("#pin").value===S.settings.pin){loggedIn=true;render()}else toast(t("wrongPin"))}
-const ratePill=()=>`<button class="ratepill" onclick="go('settings')" title="${t("updateRate")}"><span>24K</span><b class="num">Rs ${rateOf("24K").toLocaleString("en-PK")}</b><small>${t("perTola")}</small></button>`;
-function head(title,sub,extra=""){return `<div class="row" style="justify-content:flex-end">${ratePill()}</div><div class="top"><div><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div><div class="row">${extra}${langBtn()}</div></div>`}
+const ratePill=()=>`<button class="ratepill" onclick="go('settings')" title="${t("updateRate")}"><span>24K</span><b class="num">Rs ${rateOf("24K").toLocaleString("en-PK")}</b><small>${t("pillLabel")}</small></button>`;
+function head(title,sub,extra=""){return `<div class="top"><div><div class="row" style="gap:12px"><h1>${title}</h1>${ratePill()}</div>${sub?`<p>${sub}</p>`:""}</div><div class="row">${extra}${langBtn()}</div></div>`}
 
 /* ===== DASHBOARD ===== */
 function Home(){
