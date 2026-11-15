@@ -229,7 +229,7 @@ function Home(){
   <section class="grid">
    <div class="panel stat"><span>Aaj ki sale</span><b class="num gold">${rs(sale)}</b><small class="muted">${tb.length} bill</small></div>
    <div class="panel stat"><span>Aaj ka cash</span><b class="num">${rs(cash)}</b></div>
-   <div class="panel stat"><span>Stock mein</span><b class="num">${g(stockWt)}</b><small class="muted">${inStock.length} items · ${tmr(stockWt)}</small></div>
+   <button class="panel stat" style="text-align:left;cursor:pointer" onclick="stockPreview()"><span>Stock mein</span><b class="num">${g(stockWt)}</b><small class="muted">${inStock.length} items · ${tmr(stockWt)}</small><small style="color:var(--accent);font-weight:600">Poora stock dekhein →</small></button>
    <div class="panel stat"><span>Kul udhaar</span><b class="num" style="color:var(--warn)">${rs(udhaar)}</b></div>
   </section>
   <section class="panel"><h2>Haal ke bills</h2><div class="tbl"><table><tr><th>Bill</th><th>Date</th><th>Customer</th><th class="r">Total</th><th class="r">Baqi</th></tr>
@@ -336,7 +336,7 @@ let stockFilter="all";
 function Stock(){
   const list=S.stock.filter(s=>stockFilter=="all"||(stockFilter=="in"?!s.sold:s.sold));
   const inS=S.stock.filter(s=>!s.sold);
-  $("#main").innerHTML=head("Stock",`${inS.length} items · ${g(inS.reduce((a,s)=>a+s.gross,0))} dukaan mein`)+`
+  $("#main").innerHTML=head("Stock",`${inS.length} items · ${g(inS.reduce((a,s)=>a+s.gross,0))} dukaan mein`,`<button class="btn" onclick="stockPreview()">Stock ka poora preview</button>`)+`
   <section class="panel"><h2>Naya zewar</h2><div class="fields">
    <label>Tag<input id="sTag" placeholder="R-103"></label><label>Naam<input id="sName" placeholder="Ladies Ring"></label>
    <label>Qism<select id="sCat">${["Ring","Chain","Bangle","Earring","Set","Pendant","Other"].map(c=>`<option>${c}</option>`).join("")}</select></label>
@@ -351,6 +351,35 @@ function Stock(){
 function addStock(){const tag=$("#sTag").value.trim(),gross=num("sGross");if(!tag||gross<=0){toast("Tag aur wazan likhein");return}
   if(S.stock.some(s=>s.tag==tag)){toast("Ye tag pehle se hai");return}
   S.stock.push({tag,name:$("#sName").value||"Zewar",cat:$("#sCat").value,karat:$("#sKarat").value,gross,nag:num("sNag"),sold:false});save();Stock();toast("Stock mein shamil")}
+
+/* ===== STOCK PREVIEW (poori report) ===== */
+function stockPreview(){
+  const st=S.settings, inS=S.stock.filter(s=>!s.sold);
+  const sum=list=>{const gross=list.reduce((a,s)=>a+s.gross,0),nag=list.reduce((a,s)=>a+(s.nag||0),0),net=gross-nag,value=list.reduce((a,s)=>a+val(s.gross-(s.nag||0),s.karat),0);return {n:list.length,gross,nag,net,value}};
+  const all=sum(inS);
+  const byK=KARATS.map(k=>({k,...sum(inS.filter(s=>s.karat==k))})).filter(r=>r.n);
+  const cats=[...new Set(inS.map(s=>s.cat))];
+  const byC=cats.map(c=>({c,...sum(inS.filter(s=>s.cat==c))}));
+  const T=(h,rows)=>`<div class="tbl"><table style="font-size:.78rem;color:#1d1a15"><tr>${h.map((x,i)=>`<th style="color:#7a6f5a${i?";text-align:right":""}">${x}</th>`).join("")}</tr>${rows}</table></div>`;
+  const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
+  ov.innerHTML=`<div class="modal" style="max-width:640px"><div class="row"><h2>Stock Report</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">Band karein</button></div>
+  <div class="receipt"><h3>${esc(st.shop)}</h3><div style="text-align:center;font-size:.75rem;color:#7a6f5a">Stock Report · ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}</div>
+   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0">
+    <div><small style="color:#7a6f5a">Kul items</small><div class="big num">${all.n}</div></div>
+    <div><small style="color:#7a6f5a">Kul wazan</small><div class="big num">${g(all.gross)}</div><small class="num">${tmr(all.gross)}</small></div>
+    <div><small style="color:#7a6f5a">Khalis sona (nag minus)</small><div class="big num">${g(all.net)}</div><small class="num">${tmr(all.net)}</small></div>
+    <div><small style="color:#7a6f5a">Aaj ki qeemat</small><div class="big num">${rs(all.value)}</div></div>
+   </div>
+   <div style="font-weight:700;margin-top:6px">Karat ke hisaab se</div>
+   ${T(["Karat","Items","Wazan","Tola","Qeemat"],byK.map(r=>`<tr><td>${r.k}</td><td class="r num">${r.n}</td><td class="r num">${g(r.net)}</td><td class="r num">${tmr(r.net)}</td><td class="r num">${rs(r.value)}</td></tr>`).join(""))}
+   <div style="font-weight:700;margin-top:10px">Qism ke hisaab se</div>
+   ${T(["Qism","Items","Wazan","Qeemat"],byC.map(r=>`<tr><td>${esc(r.c)}</td><td class="r num">${r.n}</td><td class="r num">${g(r.gross)}</td><td class="r num">${rs(r.value)}</td></tr>`).join(""))}
+   <div style="font-weight:700;margin-top:10px">Har item</div>
+   ${T(["Tag","Naam","Karat","Wazan","Qeemat"],inS.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}</td><td class="r">${s.karat}</td><td class="r num">${g(s.gross)}${s.nag?`<div style="color:#7a6f5a">nag ${g(s.nag)}</div>`:""}</td><td class="r num">${rs(val(s.gross-(s.nag||0),s.karat))}</td></tr>`).join(""))}
+   <div style="font-size:.72rem;color:#7a6f5a;margin-top:8px">Qeemat sirf sone ki hai, aaj ke rate par (24K: ${rs(rateOf("24K"))}/tola). Mazdoori aur nag ki qeemat shamil nahi.</div>
+  </div></div>`;
+  document.body.appendChild(ov);
+}
 
 /* ===== KARIGAR ===== */
 let selK=1;
