@@ -107,7 +107,7 @@ td.r,th.r{text-align:end}
 .headbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-8px}
 .headbar .btn{padding:8px 12px;font-size:.82rem;white-space:nowrap}
 .ratepill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold);background:var(--gold-soft);color:var(--ink);border-radius:12px;padding:5px 12px;cursor:pointer;font-family:var(--font-body);text-align:start;min-width:0}
-.ratepill>span:first-child{font-size:.75rem;font-weight:700;color:var(--gold)}.rp-txt{display:flex;flex-direction:column;line-height:1.25}.ratepill b{font-size:.98rem}.ratepill small{font-size:.68rem;color:var(--muted);white-space:nowrap}
+.ratepill>span:first-child{font-size:1.15rem;font-weight:800;color:var(--gold);font-family:var(--font-display)}.rp-txt{display:flex;flex-direction:column;line-height:1.25}.ratepill b{font-size:1.08rem}.ratepill small{font-size:.68rem;color:var(--muted);white-space:nowrap}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
 html[dir="rtl"] .num{unicode-bidi:plaintext}
@@ -144,16 +144,16 @@ const TX={
  recentBills:["Recent Bills","حالیہ بل"], bill:["Bill","بل"], bills:["bills","بل"], date:["Date","تاریخ"], customer:["Customer","گاہک"],
  total:["Total","کل"], balance:["Balance","بقایا"], paid:["Paid","ادا شدہ"], walkin:["Walk-in","عام گاہک"], walkinCust:["Walk-in customer","عام گاہک"], items:["items","آئٹمز"],
  addItem:["Add Item","زیور شامل کریں"], pickStock:["Select from stock (tag)","اسٹاک سے منتخب کریں (ٹیگ)"], manual:["— Enter manually —","— خود درج کریں —"],
- itemName:["Item name","نام"], karat:["Karat","قیراط"], gross:["Gross weight (g)","کل وزن (گرام)"], stoneWt:["Stone weight (g)","نگ کا وزن (گرام)"],
+ itemName:["Item name","نام"], karat:["Karat","قیراط"], gross:["Gross weight (gm)","کل وزن (گرام)"], stoneWt:["Stone weight (gm)","نگ کا وزن (گرام)"],
  wastagePct:["Wastage %","چھیجت %"], making:["Making charges","مزدوری"], perGramOpt:["Per gram (on total weight)","فی گرام (ٹوٹل وزن پر)"], fixed:["Fixed total","فکسڈ ٹوٹل"],
  makingRate:["Making rate (Rs)","مزدوری ریٹ (روپے)"], stonePrice:["Stone price (Rs)","نگ کی قیمت (روپے)"], addToBill:["+ Add to bill","+ بل میں شامل کریں"],
  item:["Item","آئٹم"], weight:["Weight","وزن"], noItems:["No items yet. Add one using the form.","ابھی کوئی آئٹم نہیں۔ فارم سے شامل کریں۔"],
- oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (g)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
+ oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (gm)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
  itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
  wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
- makingPerGram:["Making ({0} × {1}/g)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (fixed)","مزدوری (فکسڈ)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
+ makingPerGram:["Making ({0} × {1}/gm)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (fixed)","مزدوری (فکسڈ)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
  enterWeight:["Please enter the weight","وزن درج کریں"], itemAdded:["Item added","آئٹم شامل ہو گیا"], addFirst:["Add an item first","پہلے آئٹم شامل کریں"],
  pickCust:["Select a customer to record credit","ادھار کے لیے گاہک منتخب کریں"], close:["Close","بند کریں"], printNote:["Printing will be tested in Phase 3.","پرنٹنگ فیز 3 میں ٹیسٹ ہوگی۔"],
@@ -166,8 +166,8 @@ const TX={
  reportNote:["Gold value only, at today's rate (24K: {0}/tola). Making charges and stones are not included.","صرف سونے کی قیمت، آج کے ریٹ پر (24K: {0} فی تولہ)۔ مزدوری اور نگ شامل نہیں۔"],
  karigarSub:["Gold issued, jewellery received and making charges","سونا دینا، زیور وصول کرنا اور مزدوری کا حساب"], goldBal:["Gold balance","باقی سونا"], makingDue:["Making due","باقی مزدوری"],
  newKarigar:["Add Artisan","نیا کاریگر"], name:["Name","نام"], phone:["Phone","فون"], add:["+ Add","+ شامل کریں"], newEntry:["{0} — New Entry","{0} — نیا اندراج"],
- issue:["Gold issued","سونا دیا"], receive:["Jewellery received","زیور وصول"], pay:["Payment made","ادائیگی"], jewWt:["Jewellery weight (g)","زیور کا وزن (گرام)"],
- wastG:["Wastage (g)","چھیجت (گرام)"], makingRs:["Making (Rs)","مزدوری (روپے)"], amountRs:["Amount (Rs)","رقم (روپے)"], note:["Note","نوٹ"], notePh:["Order reference","آرڈر کا حوالہ"],
+ issue:["Gold issued","سونا دیا"], receive:["Jewellery received","زیور وصول"], pay:["Payment made","ادائیگی"], jewWt:["Jewellery weight (gm)","زیور کا وزن (گرام)"],
+ wastG:["Wastage (gm)","چھیجت (گرام)"], makingRs:["Making (Rs)","مزدوری (روپے)"], amountRs:["Amount (Rs)","رقم (روپے)"], note:["Note","نوٹ"], notePh:["Order reference","آرڈر کا حوالہ"],
  save:["Save","محفوظ کریں"], history:["History","تفصیل"], entry:["Entry","اندراج"], payment:["Payment","ادائیگی"], enterName:["Please enter a name","نام درج کریں"],
  enterAmount:["Please enter an amount","رقم درج کریں"], saved:["Saved","محفوظ ہو گیا"],
  khataTitle:["Customer Ledger","گاہک کھاتہ"], khataSub:["Credit, advances and collections","ادھار، ایڈوانس اور وصولی"], customers:["Customers","گاہک"],
@@ -249,7 +249,7 @@ let loggedIn=false, screen="home", cart=[], oldGold=null;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rs=n=>"Rs "+Math.round(n).toLocaleString("en-PK");
-const g=n=>(+n).toFixed(2)+" g";
+const g=n=>(+n).toFixed(2)+" gm";
 function tmr(grams){let tt=Math.floor(grams/TOLA_G),r=grams-tt*TOLA_G,m=Math.floor(r/MASHA_G);r-=m*MASHA_G;const ra=(r/RATTI_G).toFixed(1);return `${tt}T ${m}M ${ra}R`}
 /* Only the 24K rate is entered; other karats = 24K rate x karat / 24 */
 const rateOf=k=>Math.round((S.settings.rates["24K"]||0)*parseInt(k)/24);
@@ -329,7 +329,7 @@ function Bill(){
   <div class="g2">
   <section class="panel"><h2>${t("addItem")}</h2>
    <label>${t("pickStock")}<select id="bTag" onchange="pickTag()"><option value="">${t("manual")}</option>
-    ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross}g</option>`).join("")}</select></label>
+    ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross} gm</option>`).join("")}</select></label>
    <div class="fields">
     <label>${t("itemName")}<input id="bName" placeholder="e.g. Ring"></label>
     <label>${t("karat")}<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
@@ -430,7 +430,7 @@ function Stock(){
   const st=S.settings;
   const list=S.stock.filter(s=>stockFilter=="all"||(stockFilter=="in"?!s.sold:s.sold));
   const inS=S.stock.filter(s=>!s.sold);
-  $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · ${g(inS.reduce((a,s)=>a+s.gross,0))} ${t("inShop")}`,`<button class="btn" onclick="stockPreview()">${t("fullReport")}</button>`)+`
+  $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · <span class="num">${g(inS.reduce((a,s)=>a+s.gross,0))}</span>`,`<button class="btn" onclick="stockPreview()">${t("fullReport")}</button>`)+`
   <section class="panel"><h2>${t("newStock")}</h2><div class="fields">
    <label>${t("tag")} <small class="muted">${t("autoTag")}</small><input id="sTag" placeholder="R001"></label>
    <label>${t("category")}<span class="row" style="flex-wrap:nowrap"><select id="sCat" onchange="autoTag()">${allCats().map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select><button type="button" class="btn sm" style="flex-shrink:0;padding:8px 12px" title="${t("addCat")}" aria-label="${t("addCat")}" onclick="$('#catBox').hidden=!$('#catBox').hidden;$('#newCat').focus()">+</button></span>
@@ -444,7 +444,7 @@ function Stock(){
   <div class="row"><button class="btn" onclick="addStock()">${t("addToStock")}</button></div></section>
   <section class="panel"><div class="row">${[["all","all"],["in","inShopF"],["sold","soldF"]].map(([k,l])=>`<button class="chip ${stockFilter==k?"on":""}" onclick="stockFilter='${k}';Stock()">${t(l)}</button>`).join("")}</div>
   <div class="tbl"><table><tr><th>${t("tag")}</th><th>${t("itemName")}</th><th>${t("karat")}</th><th class="r">${t("weight")}</th><th class="r">${t("makingCol")}</th><th class="r">${t("valueToday")}</th><th>${t("status")}</th></tr>
-   ${list.map(s=>{const x=stockItem(s),c=itemCalc(x);return `<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name==s.cat?catName(s.cat):s.name)}${s.name==s.cat?"":`<div class="muted small">${esc(catName(s.cat))}</div>`}</td><td>${s.karat}</td><td class="r num"><b>${g(c.goldWt)}</b><div class="muted small">${t("netShort")} ${g(c.net)} + ${t("wastShort")} ${g(c.wast)} (${x.wastage}%)</div><div class="muted small">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.maz)}<div class="muted small">${x.mazType=="gram"?rs(x.mazRate)+"/g":t("fixed")}</div></td><td class="r num">${rs(c.goldVal)}</td><td>${s.sold?`<span class="pill off">${t("soldF")}</span>`:`<span class="pill ok">${t("inShopF")}</span>`}</td></tr>`}).join("")}
+   ${list.map(s=>{const x=stockItem(s),c=itemCalc(x);return `<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name==s.cat?catName(s.cat):s.name)}${s.name==s.cat?"":`<div class="muted small">${esc(catName(s.cat))}</div>`}</td><td>${s.karat}</td><td class="r num"><b>${g(c.goldWt)}</b><div class="muted small">${t("netShort")} ${g(c.net)} + ${t("wastShort")} ${g(c.wast)} (${x.wastage}%)</div><div class="muted small">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.maz)}<div class="muted small">${x.mazType=="gram"?rs(x.mazRate)+"/gm":t("fixed")}</div></td><td class="r num">${rs(c.goldVal)}</td><td>${s.sold?`<span class="pill off">${t("soldF")}</span>`:`<span class="pill ok">${t("inShopF")}</span>`}</td></tr>`}).join("")}
   </table></div><p class="muted small" style="margin:0">${t("valueNote")}</p></section>`;
   autoTag();stockLive();
 }
