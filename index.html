@@ -115,6 +115,7 @@ td.r,th.r{text-align:end}
 .rsec[open] summary::after{transform:rotate(-135deg)}
 .rsec .rcount{font-size:.72rem;font-weight:600;background:#f0e4c8;color:#7a5a1c;border-radius:99px;padding:1px 8px}
 .rsec .tbl{padding:0 8px 8px}
+.rfilter{display:flex;gap:6px;padding:0 8px 8px}.rfilter input,.rfilter select{background:#fff;color:#1d1a15;border-color:#e3d8bf;padding:7px 9px}.rfilter input{flex:1;min-width:0}.rfilter select{width:auto;max-width:45%}
 .rsec td.num{white-space:nowrap}.rsec summary::after{margin-top:-4px}.rsec[open] summary::after{margin-top:4px}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
@@ -159,7 +160,7 @@ const TX={
  oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (gm)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
- itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
+ itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
  wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
  makingPerGram:["Making ({0} × {1}/gm)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (total)","مزدوری (ٹوٹل)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
@@ -437,7 +438,7 @@ function readStockForm(){return {tag:$("#sTag").value.trim(),name:$("#sCat").val
 function stockLive(){const it=readStockForm();$("#stockCalc").innerHTML=calcHTML(it,itemCalc(it))}
 function Stock(){
   const st=S.settings;
-  const list=S.stock.filter(s=>stockFilter=="all"||(stockFilter=="in"?!s.sold:s.sold));
+  const list=sortByTag(S.stock.filter(s=>stockFilter=="all"||(stockFilter=="in"?!s.sold:s.sold)));
   const inS=S.stock.filter(s=>!s.sold);
   $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · <span class="num">${g(inS.reduce((a,s)=>a+s.gross,0))}</span>`,`<button class="btn" onclick="stockPreview()">${t("fullReport")}</button>`)+`
   <section class="panel"><h2>${t("newStock")}</h2><div class="fields">
@@ -473,6 +474,11 @@ function addStock(){const f=readStockForm();if(!f.tag||f.gross<=0){toast(t("tagW
   delete f.nagPrice;S.stock.push({...f,sold:false});save();Stock();toast(t("addedStock")+": "+f.tag)}
 
 /* ===== STOCK REPORT (full preview) ===== */
+/* Sort by tag: letter first, then number (R001, R002, R010 ...) */
+function tagKey(tag){const m=String(tag).toUpperCase().match(/^([A-Z]*)-?(\d*)/);return [m[1]||"",parseInt(m[2]||"0")]}
+function sortByTag(list){return list.slice().sort((a,b)=>{const x=tagKey(a.tag),y=tagKey(b.tag);return x[0]<y[0]?-1:x[0]>y[0]?1:x[1]-y[1]})}
+function filterReport(){const q=$("#rSearch").value.trim().toLowerCase(),c=$("#rCat").value;let n=0;
+  document.querySelectorAll(".ritem").forEach(r=>{const ok=(!c||r.dataset.cat==c)&&(!q||r.dataset.q.includes(q));r.hidden=!ok;if(ok)n++});$("#rNone").hidden=n>0}
 function stockPreview(){
   const st=S.settings, inS=S.stock.filter(s=>!s.sold);
   const sum=list=>{const gross=list.reduce((a,s)=>a+s.gross,0),nag=list.reduce((a,s)=>a+(s.nag||0),0),net=gross-nag,value=list.reduce((a,s)=>a+val(s.gross-(s.nag||0),s.karat),0);return {n:list.length,gross,nag,net,value}};
@@ -493,7 +499,7 @@ function stockPreview(){
    </div>
    ${SEC(t("byKarat"),byK.length,T([t("karat"),t("itemsL"),t("weight"),t("tola"),t("value")],byK.map(r=>`<tr><td>${r.k}</td><td class="r num">${r.n}</td><td class="r num">${g(r.net)}</td><td class="r num">${tmr(r.net)}</td><td class="r num">${rs(r.value)}</td></tr>`).join("")))}
    ${SEC(t("byCat"),byC.length,T([t("category"),t("itemsL"),t("weight"),t("value")],byC.map(r=>`<tr><td>${esc(catName(r.c))}</td><td class="r num">${r.n}</td><td class="r num">${g(r.gross)}</td><td class="r num">${rs(r.value)}</td></tr>`).join("")))}
-   ${SEC(t("allItems"),inS.length,T([t("tag"),t("itemName"),t("karat"),t("weight"),t("value")],inS.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}</td><td class="r">${s.karat}</td><td class="r num">${g(s.gross)}${s.nag?`<div style="color:#7a6f5a">${t("stone")} ${g(s.nag)}</div>`:""}</td><td class="r num">${rs(val(s.gross-(s.nag||0),s.karat))}</td></tr>`).join("")))}
+   ${SEC(t("allItems"),inS.length,`<div class="rfilter"><input id="rSearch" type="search" placeholder="${t("searchPh")}" oninput="filterReport()"><select id="rCat" onchange="filterReport()"><option value="">${t("allCats")}</option>${[...new Set(sortByTag(inS).map(s=>s.cat))].map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select></div>`+T([t("tag"),t("category"),t("karat"),t("weight"),t("value")],sortByTag(inS).map(s=>`<tr class="ritem" data-cat="${esc(s.cat)}" data-q="${esc([s.tag,s.name,s.cat,(CATS[s.cat]||[]).join(" "),s.karat].join(" ").toLowerCase())}"><td><b>${esc(s.tag)}</b></td><td>${esc(s.name==s.cat?catName(s.cat):s.name)}</td><td class="r">${s.karat}</td><td class="r num">${g(s.gross)}${s.nag?`<div style="color:#7a6f5a">${t("stone")} ${g(s.nag)}</div>`:""}</td><td class="r num">${rs(val(s.gross-(s.nag||0),s.karat))}</td></tr>`).join("")+`<tr id="rNone" hidden><td colspan="5" style="color:#7a6f5a">${t("noMatch")}</td></tr>`))}
    <div style="font-size:.72rem;color:#7a6f5a;margin-top:8px">${t("reportNote",rs(rateOf("24K")))}</div>
   </div></div>`;
   document.body.appendChild(ov);
