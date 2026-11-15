@@ -367,8 +367,8 @@ function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s)return
 function calcHTML(it,c){return `
  <div style="font-weight:700"><span>${t("calcTitle")}</span><span></span></div>
  <div><span>${t("grossL")}</span><span>${g(it.gross)}</span></div>
- ${it.nag?`<div><span>${t("lessStone")}</span><span>− ${g(it.nag)}</span></div>`:""}
- <div><span>${t("netWt")}</span><span>${g(c.net)}</span></div>
+ <div><span>${t("lessStone")}</span><span>− ${g(it.nag)}</span></div>
+ <div><span>${t("netWt")} (${g(it.gross)} − ${g(it.nag)})</span><span>${g(c.net)}</span></div>
  <div><span>${t("wastageOf",it.wastage)}</span><span>+ ${g(c.wast)}</span></div>
  <div style="font-weight:700;border-top:1px solid var(--line);padding-top:6px"><span>${t("totalWt")}</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
  <div><span>${t("goldValue")} (${it.karat} @ ${rs(rateOf(it.karat))}/${t("tola")})</span><span>${rs(c.goldVal)}</span></div>
