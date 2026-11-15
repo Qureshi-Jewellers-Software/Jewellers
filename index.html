@@ -140,13 +140,15 @@ const TX={
  total:["Total","کل"], balance:["Balance","بقایا"], paid:["Paid","ادا شدہ"], walkin:["Walk-in","عام گاہک"], walkinCust:["Walk-in customer","عام گاہک"], items:["items","آئٹمز"],
  addItem:["Add Item","زیور شامل کریں"], pickStock:["Select from stock (tag)","اسٹاک سے منتخب کریں (ٹیگ)"], manual:["— Enter manually —","— خود درج کریں —"],
  itemName:["Item name","نام"], karat:["Karat","قیراط"], gross:["Gross weight (g)","کل وزن (گرام)"], stoneWt:["Stone weight (g)","نگ کا وزن (گرام)"],
- wastagePct:["Wastage %","چھیجت %"], making:["Making charges","مزدوری"], perGramOpt:["Per gram","فی گرام"], fixed:["Fixed","فکسڈ"],
+ wastagePct:["Wastage %","چھیجت %"], making:["Making charges","مزدوری"], perGramOpt:["Per gram (on total weight)","فی گرام (ٹوٹل وزن پر)"], fixed:["Fixed total","فکسڈ ٹوٹل"],
  makingRate:["Making rate (Rs)","مزدوری ریٹ (روپے)"], stonePrice:["Stone price (Rs)","نگ کی قیمت (روپے)"], addToBill:["+ Add to bill","+ بل میں شامل کریں"],
  item:["Item","آئٹم"], weight:["Weight","وزن"], noItems:["No items yet. Add one using the form.","ابھی کوئی آئٹم نہیں۔ فارم سے شامل کریں۔"],
  oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (g)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
- itemTotal:["Item total","آئٹم کل"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
+ itemTotal:["Item total","آئٹم کل"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
+ wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
+ makingPerGram:["Making ({0} × {1}/g)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (fixed)","مزدوری (فکسڈ)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
  enterWeight:["Please enter the weight","وزن درج کریں"], itemAdded:["Item added","آئٹم شامل ہو گیا"], addFirst:["Add an item first","پہلے آئٹم شامل کریں"],
  pickCust:["Select a customer to record credit","ادھار کے لیے گاہک منتخب کریں"], close:["Close","بند کریں"], printNote:["Printing will be tested in Phase 3.","پرنٹنگ فیز 3 میں ٹیسٹ ہوگی۔"],
@@ -311,7 +313,7 @@ function Home(){
 /* ===== BILL ===== */
 function itemCalc(it){
   const net=Math.max(0,it.gross-it.nag), wast=net*it.wastage/100, goldWt=net+wast;
-  const goldVal=val(goldWt,it.karat), maz=it.mazType=="gram"?net*it.mazRate:it.mazRate;
+  const goldVal=val(goldWt,it.karat), maz=it.mazType=="gram"?goldWt*it.mazRate:it.mazRate;
   return {net,wast,goldWt,goldVal,maz,total:goldVal+maz+it.nagPrice};
 }
 function Bill(){
@@ -337,7 +339,7 @@ function Bill(){
   <section class="panel"><h2>${t("bill")}</h2>
    <label>${t("customer")}<select id="bCust"><option value="0">${t("walkinCust")}</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></label>
    <div class="tbl"><table><tr><th>${t("item")}</th><th>${t("weight")}</th><th class="r">Rs</th><th></th></tr>
-    ${cart.length?cart.map((it,i)=>{const c=itemCalc(it);return `<tr><td>${esc(it.name)}<div class="muted small">${it.karat}${it.tag?" · "+it.tag:""}</div></td><td class="num small">${g(c.goldWt)}<div class="muted">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.total)}</td><td><button class="btn ghost sm" onclick="cart.splice(${i},1);Bill()">✕</button></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">${t("noItems")}</td></tr>`}
+    ${cart.length?cart.map((it,i)=>{const c=itemCalc(it);return `<tr><td>${esc(it.name)}<div class="muted small">${it.karat}${it.tag?" · "+it.tag:""}</div></td><td class="num small"><b>${g(c.goldWt)}</b><div class="muted">${t("netShort")} ${g(c.net)} + ${t("wastShort")} ${g(c.wast)}</div><div class="muted">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.total)}</td><td><button class="btn ghost sm" onclick="cart.splice(${i},1);Bill()">✕</button></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">${t("noItems")}</td></tr>`}
    </table></div>
    <details ${oldGold?"open":""}><summary style="cursor:pointer;font-weight:600">${t("oldGold")}</summary>
     <div class="fields" style="margin-top:10px">
@@ -354,11 +356,14 @@ function Bill(){
 function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Jewellery",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
 function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s)return;$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bGross").value=s.gross;$("#bNag").value=s.nag;live()}
 function live(){const it=readItem(),c=itemCalc(it);$("#liveBox").innerHTML=`
+ <div style="font-weight:700"><span>${t("calcTitle")}</span><span></span></div>
+ <div><span>${t("grossL")}</span><span>${g(it.gross)}</span></div>
+ ${it.nag?`<div><span>${t("lessStone")}</span><span>− ${g(it.nag)}</span></div>`:""}
  <div><span>${t("netWt")}</span><span>${g(c.net)}</span></div>
- <div><span>${t("wastage")}</span><span>${g(c.wast)}</span></div>
- <div><span>${t("goldWt")}</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
- <div><span>${t("gold")} (${it.karat} @ ${rs(rateOf(it.karat))}/${t("tola")})</span><span>${rs(c.goldVal)}</span></div>
- <div><span>${t("makingL")}</span><span>${rs(c.maz)}</span></div>
+ <div><span>${t("wastageOf",it.wastage)}</span><span>+ ${g(c.wast)}</span></div>
+ <div style="font-weight:700;border-top:1px solid var(--line);padding-top:6px"><span>${t("totalWt")}</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
+ <div><span>${t("goldValue")} (${g(c.goldWt)} × ${it.karat} @ ${rs(rateOf(it.karat))}/${t("tola")})</span><span>${rs(c.goldVal)}</span></div>
+ <div><span>${it.mazType=="gram"?t("makingPerGram",g(c.goldWt),rs(it.mazRate)):t("makingFixed")}</span><span>${rs(c.maz)}</span></div>
  <div><span>${t("stone")}</span><span>${rs(it.nagPrice)}</span></div>
  <div class="tot"><span>${t("itemTotal")}</span><span class="gold">${rs(c.total)}</span></div>`}
 function addItem(){const it=readItem();if(it.gross<=0){toast(t("enterWeight"));return}cart.push(it);Bill();toast(t("itemAdded"))}
@@ -394,7 +399,7 @@ function showReceipt(b){
    <div class="ur" style="text-align:center;font-size:1.1rem;margin:6px 0">رسید</div>
    ${L("گاہک","Customer",esc(c?.name||"Walk-in"))}${L("تاریخ","Date",fmtD(b.date))}
    ${(b.items||[]).map(it=>`<div style="margin-top:8px;font-weight:600;font-size:.85rem">${esc(it.name)} · ${it.karat}</div>
-     ${L("وزن","Weight",`${g(it.calc.goldWt)} (${tmr(it.calc.goldWt)})`)}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
+     ${L("خالص وزن","Net weight",g(it.calc.net))}${L("چھیجت","Wastage "+(it.wastage||0)+"%",g(it.calc.wast))}${L("ٹوٹل وزن","Total weight",`${g(it.calc.goldWt)} (${tmr(it.calc.goldWt)})`)}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
    ${b.old?L("پرانا سونا","Old gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
    ${L("کل رقم","Total",rs(b.total),"big")}${L("وصول","Received",rs(b.paid))}${L("باقی","Balance",rs(Math.max(0,b.total-b.paid)),"big")}
    <div class="ur" style="text-align:center;margin-top:8px">خریداری کا شکریہ</div><div style="text-align:center;font-size:.75rem;color:#7a6f5a">Thank you for your purchase</div></div>
