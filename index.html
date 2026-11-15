@@ -146,7 +146,7 @@ const TX={
  oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (g)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
- itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
+ itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
  wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
  makingPerGram:["Making ({0} × {1}/g)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (fixed)","مزدوری (فکسڈ)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
@@ -184,6 +184,7 @@ let LANG="en"; try{LANG=localStorage.getItem(LANG_KEY)||"en"}catch(e){}
 const LI=()=>LANG=="ur"?1:0;
 function t(k,...a){let s=(TX[k]||[k,k])[LI()];a.forEach((v,i)=>s=s.replace("{"+i+"}",v));return s}
 const catName=c=>(CATS[c]||[c,c])[LI()];
+const allCats=()=>[...Object.keys(CATS),...((S&&S.settings.cats)||[])];
 function setLang(l){LANG=l;try{localStorage.setItem(LANG_KEY,l)}catch(e){}render()}
 const langBtn=()=>LANG=="ur"?`<button class="lang" onclick="setLang('en')">English</button>`:`<button class="lang lang-ur" onclick="setLang('ur')">اردو</button>`;
 const LOC=()=>LANG=="ur"?"ur-PK":"en-GB";
@@ -426,7 +427,8 @@ function Stock(){
   $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · ${g(inS.reduce((a,s)=>a+s.gross,0))} ${t("inShop")}`,`<button class="btn" onclick="stockFormOpen=!stockFormOpen;Stock()">${t("addNewItem")}</button><button class="btn ghost" onclick="stockPreview()">${t("fullReport")}</button>`)+`
   ${stockFormOpen?`<section class="panel"><h2>${t("newStock")}</h2><div class="fields">
    <label>${t("tag")}<input id="sTag" placeholder="R-103"></label><label>${t("itemName")}<input id="sName" placeholder="Ladies Ring"></label>
-   <label>${t("category")}<select id="sCat">${Object.keys(CATS).map(c=>`<option value="${c}">${catName(c)}</option>`).join("")}</select></label>
+   <label>${t("category")}<span class="row" style="flex-wrap:nowrap"><select id="sCat">${allCats().map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("")}</select><button type="button" class="btn sm" style="flex-shrink:0;padding:8px 12px" title="${t("addCat")}" aria-label="${t("addCat")}" onclick="$('#catBox').hidden=!$('#catBox').hidden;$('#newCat').focus()">+</button></span>
+    <span id="catBox" class="row" style="flex-wrap:nowrap" hidden><input id="newCat" placeholder="${t("newCatPh")}" onkeydown="if(event.key=='Enter'){event.preventDefault();addCat()}"><button type="button" class="btn sm" style="flex-shrink:0" onclick="addCat()">${t("save")}</button></span></label>
    <label>${t("karat")}<select id="sKarat" oninput="stockLive()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
    <label>${t("gross")}<input id="sGross" type="number" step="0.01" oninput="stockLive()"></label><label>${t("stoneWt")}<input id="sNag" type="number" step="0.01" value="0" oninput="stockLive()"></label>
    <label>${t("wastagePct")}<input id="sWast" type="number" step="0.1" value="${st.wastage}" oninput="stockLive()"></label>
@@ -440,6 +442,11 @@ function Stock(){
   </table></div><p class="muted small" style="margin:0">${t("valueNote")}</p></section>`;
   if(stockFormOpen)stockLive();
 }
+function addCat(){const n=$("#newCat").value.trim();if(!n)return toast(t("enterName"));
+  if(allCats().some(c=>c.toLowerCase()==n.toLowerCase()||catName(c)==n))return toast(t("catExists"));
+  (S.settings.cats=S.settings.cats||[]).push(n);save();
+  const o=document.createElement("option");o.value=n;o.textContent=n;$("#sCat").appendChild(o);$("#sCat").value=n;
+  $("#newCat").value="";$("#catBox").hidden=true;toast(t("catAdded"))}
 function addStock(){const f=readStockForm();if(!f.tag||f.gross<=0){toast(t("tagWt"));return}
   if(S.stock.some(s=>s.tag==f.tag)){toast(t("tagExists"));return}
   delete f.nagPrice;S.stock.push({...f,sold:false});stockFormOpen=false;save();Stock();toast(t("addedStock"))}
