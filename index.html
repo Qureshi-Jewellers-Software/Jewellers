@@ -197,7 +197,7 @@ const TX={
  selectHint:["Tap a customer in the list to view their full ledger.","فہرست میں کسی گاہک پر ٹیپ کریں، اس کا مکمل کھاتہ یہاں نظر آئے گا۔"], collection:["Collection","وصولی"], credit:["Credit","ادھار"],
  last7:["Last 7 days","پچھلے 7 دن"], totalSales:["Total sales","کل سیل"], cashIn:["Cash received","وصول رقم"], goldSold:["Gold sold","فروخت شدہ سونا"], billsL:["Bills","بل"],
  dailySales:["Daily Sales","روزانہ سیل"], goldWithK:["Gold with Artisans","کاریگروں کے پاس سونا"],
- settingsSub:["Adjust these to match your shop's practice","اپنی دکان کے طریقے کے مطابق تبدیل کریں"], shop:["Shop","دکان"], shopName:["Shop name","دکان کا نام"], address:["Address","پتہ"], pin:["PIN","پن"],
+ settingsSub:["Adjust these to match your shop's practice","اپنی دکان کے طریقے کے مطابق تبدیل کریں"], shop:["Shop","دکان"], shopName:["Shop Name","دکان کا نام"], ownerName:["Owner Name","مالک کا نام"], ownerMobile:["Owner Mobile No","مالک کا موبائل نمبر"], address:["Address","پتہ"], pin:["PIN","پن"],
  rateTitle:["Today's Rate (per tola)","آج کا ریٹ (فی تولہ)"], r24:["24K (enter here)","24K (یہاں لکھیں)"], auto:["(auto)","(خودکار)"],
  rateNote:["Enter the 24K rate only. Other karats are calculated automatically.","صرف 24K کا ریٹ لکھیں۔ باقی قیراط کا ریٹ خود بخود حساب ہو جائے گا۔"],
  rules:["Calculation Rules","حساب کے اصول"], defWastage:["Default wastage %","ڈیفالٹ چھیجت %"], makingMethod:["Making charge method","مزدوری کا طریقہ"],
@@ -219,7 +219,7 @@ const LOC=()=>LANG=="ur"?"ur-PK":"en-GB";
 function dayISO(off){const d=new Date();d.setDate(d.getDate()-off);return d.toISOString().slice(0,10)}
 function demoData(){
   return {
-    settings:{shop:"Al-Noor Jewellers (Demo)",phone:"0300-1234567",address:"Sarafa Bazaar, Saddar, Karachi",
+    settings:{shop:"Al-Noor Jewellers (Demo)",owner:"Haji Muhammad Ali",phone:"0300-1234567",address:"Sarafa Bazaar, Saddar, Karachi",
       pin:"1234",rates:{"24K":430000,"22K":394200,"21K":376300},wastage:15,mazType:"gram",mazRate:1500,kaat:6},
     stock:[
       {tag:"R001",name:"Ladies Ring",cat:"Ring",karat:"22K",gross:4.2,nag:0.3,sold:false},
@@ -430,7 +430,9 @@ function showReceipt(b){
   const L=(ur,en,v,cls="")=>`<div class="line ${cls}"><span><span class="ur">${ur}</span> <small style="color:#7a6f5a">${en}</small></span><span class="num">${v}</span></div>`;
   const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
   ov.innerHTML=`<div class="modal"><div class="row"><h2>${t("bill")} #${b.no}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">${t("close")}</button></div>
-  <div class="receipt"><h3>${esc(st.shop)}</h3><div style="text-align:center;font-size:.75rem;color:#7a6f5a">${esc(st.address)} · ${esc(st.phone)}</div>
+  <div class="receipt"><h3 style="font-size:1.25rem;margin:0">${esc(st.shop)}</h3>
+   ${st.owner||st.phone?`<div style="text-align:center;font-weight:600;font-size:.85rem;margin-top:4px">${st.owner?esc(st.owner):""}${st.owner&&st.phone?" · ":""}${st.phone?`<span class="num">📞 ${esc(st.phone)}</span>`:""}</div>`:""}
+   ${st.address?`<div style="text-align:center;font-size:.75rem;color:#7a6f5a">${esc(st.address)}</div>`:""}
    <div class="ur" style="text-align:center;font-size:1.1rem;margin:6px 0">رسید</div>
    ${L("گاہک","Customer",esc(c?.name||"Walk-in"))}${L("تاریخ","Date",fmtD(b.date))}
    ${(b.items||[]).map(it=>`<div style="margin-top:8px;font-weight:600;font-size:.85rem">${esc(it.name)} · ${it.karat}</div>
@@ -600,7 +602,7 @@ function Report(){
 function Settings(){const st=S.settings;
   $("#main").innerHTML=head(t("settings"),t("settingsSub"))+`
   <section class="panel"><h2>${t("shop")}</h2><div class="fields">
-   <label>${t("shopName")}<input id="stShop" value="${esc(st.shop)}"></label><label>${t("phone")}<input id="stPhone" value="${esc(st.phone)}"></label>
+   <label>${t("shopName")}<input id="stShop" value="${esc(st.shop)}"></label><label>${t("ownerName")}<input id="stOwner" value="${esc(st.owner||"")}" placeholder="Haji Muhammad Ali"></label><label>${t("ownerMobile")}<input id="stPhone" type="tel" value="${esc(st.phone)}" placeholder="0300-1234567"></label>
    <label>${t("address")}<input id="stAddr" value="${esc(st.address)}"></label><label>${t("pin")}<input id="stPin" value="${esc(st.pin)}"></label></div></section>
   <section class="panel"><h2>${t("rateTitle")}</h2><div class="fields">${KARATS.map(k=>k=="24K"?`<label>${t("r24")}<input id="r24K" type="number" value="${st.rates["24K"]}" oninput="autoRates()"></label>`:`<label>${k} ${t("auto")}<input id="r${k}" type="number" value="${rateOf(k)}" readonly tabindex="-1" style="opacity:.75"></label>`).join("")}</div>
    <p class="muted small" style="margin:0">${t("rateNote")}</p></section>
@@ -633,7 +635,7 @@ function readBackup(inp){const f=inp.files[0];if(!f)return;const r=new FileReade
    catch(e){toast(t("badFile"))}inp.value=""};r.readAsText(f)}
 function doRestore(){if(!pendingRestore)return;S=pendingRestore;S.mig15=1;pendingRestore=null;cart=[];oldGold=null;save();render();toast(t("restored"))}
 function autoRates(){const r=num("r24K");KARATS.forEach(k=>{if(k!="24K")$("#r"+k).value=Math.round(r*parseInt(k)/24)})}
-function saveSet(){const st=S.settings;st.shop=$("#stShop").value;st.phone=$("#stPhone").value;st.address=$("#stAddr").value;st.pin=$("#stPin").value||"1234";
+function saveSet(){const st=S.settings;st.shop=$("#stShop").value;st.phone=$("#stPhone").value;st.owner=$("#stOwner").value.trim();st.address=$("#stAddr").value;st.pin=$("#stPin").value||"1234";
   st.rates["24K"]=num("r24K");st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");st.lowLimit=Math.max(0,Math.round(num("stLow")));save();render();toast(t("settingsSaved"))}
 function resetAsk(b){if(b.dataset.c){S=demoData();cart=[];oldGold=null;save();render();toast(t("demoRestored"))}else{b.dataset.c=1;b.textContent=t("sure");b.classList.add("danger")}}
 
