@@ -174,7 +174,9 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const rs=n=>"Rs "+Math.round(n).toLocaleString("en-PK");
 const g=n=>(+n).toFixed(2)+" g";
 function tmr(grams){let t=Math.floor(grams/TOLA_G),r=grams-t*TOLA_G,m=Math.floor(r/MASHA_G);r-=m*MASHA_G;const ra=(r/RATTI_G).toFixed(1);return `${t}T ${m}M ${ra}R`}
-const val=(grams,karat)=>grams/TOLA_G*S.settings.rates[karat];
+/* Sirf 24K ka rate haath se; baqi karat khud: 24K rate x karat / 24 */
+const rateOf=k=>Math.round((S.settings.rates["24K"]||0)*parseInt(k)/24);
+const val=(grams,karat)=>grams/TOLA_G*rateOf(karat);
 const today=()=>new Date().toISOString().slice(0,10);
 const fmtD=d=>new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"});
 const cust=id=>S.customers.find(c=>c.id==id);
@@ -219,9 +221,9 @@ function Home(){
   const sale=tb.reduce((a,b)=>a+b.total,0), cash=tb.reduce((a,b)=>a+b.paid,0);
   const inStock=S.stock.filter(s=>!s.sold), stockWt=inStock.reduce((a,s)=>a+s.gross,0);
   const udhaar=S.customers.reduce((a,c)=>a+Math.max(0,custBal(c.id)),0);
-  $("#main").innerHTML=head("Assalam o Alaikum",new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),`<button class="btn" onclick="go('bill')">+ Naya Bill</button>`)+`
+  $("#main").innerHTML=head("Assalam o Alaikum",new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),`<button class="btn" onclick="go('bill')">+ New Bill</button>`)+`
   <section class="panel"><div class="row"><h2>Aaj ka rate</h2><span class="muted small">per tola</span><span class="spacer"></span><button class="btn ghost sm" onclick="go('settings')">Rate badlein</button></div>
-   <div class="rates">${KARATS.map(k=>`<div class="rate"><small>${k}</small><b class="num">${Math.round(S.settings.rates[k]).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
+   <div class="rates">${KARATS.map(k=>`<div class="rate"><small>${k}</small><b class="num">${rateOf(k).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
   <section class="grid">
    <div class="panel stat"><span>Aaj ki sale</span><b class="num gold">${rs(sale)}</b><small class="muted">${tb.length} bill</small></div>
    <div class="panel stat"><span>Aaj ka cash</span><b class="num">${rs(cash)}</b></div>
@@ -241,7 +243,7 @@ function itemCalc(it){
 }
 function Bill(){
   const st=S.settings;
-  $("#main").innerHTML=head("Naya Bill",`Bill #${S.nextBill} · ${fmtD(today())}`)+`
+  $("#main").innerHTML=head("New Bill",`Bill #${S.nextBill} · ${fmtD(today())}`)+`
   <div class="g2">
   <section class="panel"><h2>Zewar shamil karein</h2>
    <label>Stock se chunein (tag)<select id="bTag" onchange="pickTag()"><option value="">— Haath se likhein —</option>
@@ -282,7 +284,7 @@ function live(){const it=readItem(),c=itemCalc(it);$("#liveBox").innerHTML=`
  <div><span>Khalis wazan</span><span>${g(c.net)}</span></div>
  <div><span>Wastage</span><span>${g(c.wast)}</span></div>
  <div><span>Sone ka wazan</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
- <div><span>Sona (${it.karat} @ ${rs(S.settings.rates[it.karat])}/tola)</span><span>${rs(c.goldVal)}</span></div>
+ <div><span>Sona (${it.karat} @ ${rs(rateOf(it.karat))}/tola)</span><span>${rs(c.goldVal)}</span></div>
  <div><span>Mazdoori</span><span>${rs(c.maz)}</span></div>
  <div><span>Nag</span><span>${rs(it.nagPrice)}</span></div>
  <div class="tot"><span>Item total</span><span class="gold">${rs(c.total)}</span></div>`}
@@ -419,8 +421,8 @@ function Settings(){const st=S.settings;
   <section class="panel"><h2>Dukaan</h2><div class="fields">
    <label>Dukaan ka naam<input id="stShop" value="${esc(st.shop)}"></label><label>Phone<input id="stPhone" value="${esc(st.phone)}"></label>
    <label>Pata<input id="stAddr" value="${esc(st.address)}"></label><label>PIN<input id="stPin" value="${esc(st.pin)}"></label></div></section>
-  <section class="panel"><h2>Aaj ka rate (per tola)</h2><div class="fields">${KARATS.map(k=>`<label>${k}<input id="r${k}" type="number" value="${st.rates[k]}"></label>`).join("")}</div>
-   <div><button class="btn ghost sm" onclick="autoRates()">24K se baqi khud nikalein</button></div></section>
+  <section class="panel"><h2>Aaj ka rate (per tola)</h2><div class="fields">${KARATS.map(k=>k=="24K"?`<label>24K (yahan likhein)<input id="r24K" type="number" value="${st.rates["24K"]}" oninput="autoRates()"></label>`:`<label>${k} (khud)<input id="r${k}" type="number" value="${rateOf(k)}" readonly tabindex="-1" style="opacity:.75"></label>`).join("")}</div>
+   <p class="muted small" style="margin:0">Sirf 24K ka rate likhein. Baqi karat ka rate khud hisaab ho jayega.</p></section>
   <section class="panel"><h2>Hisaab ke qaide</h2><div class="fields">
    <label>Default wastage %<input id="stW" type="number" step="0.1" value="${st.wastage}"></label>
    <label>Mazdoori tareeqa<select id="stMT"><option value="gram" ${st.mazType=="gram"?"selected":""}>Per gram</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>Fixed per item</option></select></label>
@@ -429,9 +431,9 @@ function Settings(){const st=S.settings;
   <div class="row"><button class="btn" onclick="saveSet()">Settings save karein</button><span class="spacer"></span>
    <button class="btn ghost sm" onclick="resetAsk(this)">Demo data dobara bharein</button></div>`;
 }
-function autoRates(){const r=num("r24K");$("#r22K").value=Math.round(r*22/24/100)*100;$("#r21K").value=Math.round(r*21/24/100)*100}
+function autoRates(){const r=num("r24K");KARATS.forEach(k=>{if(k!="24K")$("#r"+k).value=Math.round(r*parseInt(k)/24)})}
 function saveSet(){const st=S.settings;st.shop=$("#stShop").value;st.phone=$("#stPhone").value;st.address=$("#stAddr").value;st.pin=$("#stPin").value||"1234";
-  KARATS.forEach(k=>st.rates[k]=num("r"+k));st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");save();render();toast("Settings save ho gayin")}
+  st.rates["24K"]=num("r24K");st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");save();render();toast("Settings save ho gayin")}
 function resetAsk(b){if(b.dataset.c){S=demoData();cart=[];oldGold=null;save();render();toast("Demo data wapas aa gaya")}else{b.dataset.c=1;b.textContent="Pakka? Dobara dabayein";b.classList.add("danger")}}
 
 render();
