@@ -199,7 +199,7 @@ function dayISO(off){const d=new Date();d.setDate(d.getDate()-off);return d.toIS
 function demoData(){
   return {
     settings:{shop:"Al-Noor Jewellers (Demo)",phone:"0300-1234567",address:"Sarafa Bazaar, Saddar, Karachi",
-      pin:"1234",rates:{"24K":430000,"22K":394200,"21K":376300},wastage:5,mazType:"gram",mazRate:1500,kaat:6},
+      pin:"1234",rates:{"24K":430000,"22K":394200,"21K":376300},wastage:15,mazType:"gram",mazRate:1500,kaat:6},
     stock:[
       {tag:"R001",name:"Ladies Ring",cat:"Ring",karat:"22K",gross:4.2,nag:0.3,sold:false},
       {tag:"R002",name:"Gents Ring",cat:"Ring",karat:"21K",gross:6.8,nag:0,sold:false},
@@ -242,6 +242,7 @@ function demoData(){
 /* ===== STORAGE ===== */
 let S; try{S=JSON.parse(localStorage.getItem(STORE_KEY))}catch(e){}
 if(!S||!S.settings) S=demoData();
+if(!S.mig15){S.settings.wastage=15;S.mig15=1;} /* one-time: default wastage now 15% */
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(S))}catch(e){}}
 let loggedIn=false, screen="home", cart=[], oldGold=null;
 
@@ -436,8 +437,8 @@ function Stock(){
     <span id="catBox" class="row" style="flex-wrap:nowrap" hidden><input id="newCat" placeholder="${t("newCatPh")}" onkeydown="if(event.key=='Enter'){event.preventDefault();addCat()}"><button type="button" class="btn sm" style="flex-shrink:0" onclick="addCat()">${t("save")}</button></span></label>
    <label>${t("tag")}<input id="sTag" placeholder="R001"></label>
    <label>${t("karat")}<select id="sKarat" oninput="stockLive()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
-   <label>${t("gross")}<input id="sGross" type="number" step="0.01" oninput="stockLive()"></label><label>${t("stoneWt")}<input id="sNag" type="number" step="0.01" value="0" oninput="stockLive()"></label>
-   <label>${t("wastagePct")}<input id="sWast" type="number" step="0.1" value="${st.wastage}" oninput="stockLive()"></label>
+   <label>${t("gross")}<input id="sGross" type="number" step="0.01" oninput="stockLive()"></label><label>${t("wastagePct")}<input id="sWast" type="number" step="0.5" min="0" value="${st.wastage}" oninput="stockLive()"></label>
+   <label>${t("stoneWt")}<input id="sNag" type="number" step="0.01" value="0" oninput="stockLive()"></label>
    <label>${t("making")}<select id="sMazType" oninput="stockLive()"><option value="gram" ${st.mazType=="gram"?"selected":""}>${t("perGramOpt")}</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>${t("fixed")}</option></select></label>
    <label>${t("makingRate")}<input id="sMaz" type="number" value="${st.mazRate}" oninput="stockLive()"></label>
   </div><div class="calc num" id="stockCalc"></div>
