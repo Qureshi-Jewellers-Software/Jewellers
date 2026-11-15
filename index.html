@@ -40,11 +40,11 @@ label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--mu
 .btn.sm{padding:5px 10px;font-size:.8rem}
 .btn.danger{background:var(--bad);color:#fff}
 .app{display:flex;min-height:100%}
-.rail{width:200px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);padding:18px 10px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.rail{width:200px;flex-shrink:0;background:var(--panel);border-inline-end:1px solid var(--line);padding:18px 10px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
 .brand{padding:0 8px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
 .brand b{font-family:var(--font-display);font-size:1.1rem;display:block}
 .brand small{color:var(--muted);font-size:.72rem}
-.nav{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;border:0;background:none;cursor:pointer;text-align:left;width:100%;color:var(--muted);font-weight:500}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;border:0;background:none;cursor:pointer;text-align:start;width:100%;color:var(--muted);font-weight:500}
 .nav svg{width:18px;height:18px;flex-shrink:0}
 .nav.on{background:var(--gold-soft);color:var(--ink)}
 main{flex:1;min-width:0;padding-block:20px 90px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -65,10 +65,10 @@ main{flex:1;min-width:0;padding-block:20px 90px;padding-left:max(16px,env(safe-a
 .rate b{font-family:var(--font-display);font-size:1.05rem}
 .tbl{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.85rem}
-th{text-align:left;font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{text-align:start;font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
 td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 tr:last-child td{border-bottom:0}
-td.r,th.r{text-align:right}
+td.r,th.r{text-align:end}
 .pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.72rem;font-weight:600}
 .pill.ok{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}
 .pill.off{background:color-mix(in srgb,var(--muted) 15%,transparent);color:var(--muted)}
@@ -98,12 +98,20 @@ td.r,th.r{text-align:right}
 .demo-tag{font-size:.7rem;background:var(--gold-soft);color:var(--gold);padding:2px 8px;border-radius:99px;font-weight:600}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:.85rem;z-index:60}
 @media (max-width:760px){
-  .rail{position:fixed;top:auto;bottom:0;left:0;right:0;width:auto;height:auto;flex-direction:row;padding:6px max(4px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(4px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line);z-index:40;gap:0}
+  .rail{position:fixed;top:auto;bottom:0;left:0;right:0;width:auto;height:auto;flex-direction:row;padding:6px max(4px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(4px,env(safe-area-inset-left,0px));border-inline-end:0;border-top:1px solid var(--line);z-index:40;gap:0}
   .brand{display:none}
   .nav{flex-direction:column;gap:2px;padding:6px 2px;font-size:.62rem;text-align:center;justify-content:center}
   .nav.on{background:none;color:var(--accent)}
   .rates{gap:6px} .rate b{font-size:.92rem}
 }
+.lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
+html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
+html[dir="rtl"] .num{unicode-bidi:plaintext}
+html[lang="ur"] body{line-height:2.1}
+html[lang="ur"] .stat span,html[lang="ur"] th{text-transform:none;letter-spacing:0}
+html[lang="ur"] .num,html[lang="ur"] input[type="number"]{font-family:var(--font-body)}
+html[lang="ur"] .lang{font-family:var(--font-body)}
+.lang-ur{font-family:var(--font-urdu)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -112,12 +120,73 @@ td.r,th.r{text-align:right}
 <div id="root"></div>
 
 <script>
-/* ===== CONFIG: yahan se units aur default settings badlein ===== */
+/* ===== CONFIG: units and default settings ===== */
 const TOLA_G = 11.664, MASHA_G = TOLA_G/12, RATTI_G = MASHA_G/8;
 const KARATS = ["24K","22K","21K"];
 const STORE_KEY = "sarafa_demo_v1";
+const LANG_KEY = "sarafa_lang";
 
-/* ===== DEMO DATA (farzi) ===== */
+/* ===== LANGUAGE: [English, Urdu] — add or edit wording here ===== */
+const TX={
+ dashboard:["Dashboard","ڈیش بورڈ"], newBill:["New Bill","نیا بل"], stock:["Stock","اسٹاک"], karigar:["Artisans","کاریگر"],
+ khata:["Ledger","کھاتہ"], reports:["Reports","رپورٹس"], settings:["Settings","سیٹنگز"],
+ brandSub:["Sarafa Manager · Demo","صرافہ مینیجر · ڈیمو"],
+ enterPin:["Enter PIN","پن درج کریں"], login:["Log in","لاگ ان"], demoPin:["Demo PIN: 1234","ڈیمو پن: 1234"], wrongPin:["Incorrect PIN","غلط پن"],
+ greeting:["Welcome","السلام علیکم"],
+ todayRate:["Today's Gold Rate","آج کا سونے کا ریٹ"], perTola:["per tola","فی تولہ"], perGram:["per gram","فی گرام"], updateRate:["Update rate","ریٹ تبدیل کریں"],
+ todaySales:["Today's Sales","آج کی سیل"], todayCash:["Cash Received Today","آج وصول شدہ رقم"], inStock:["In Stock","اسٹاک میں"],
+ viewStock:["View full stock →","مکمل اسٹاک دیکھیں ←"], receivables:["Total Receivables","کل واجب الوصول"],
+ recentBills:["Recent Bills","حالیہ بل"], bill:["Bill","بل"], bills:["bills","بل"], date:["Date","تاریخ"], customer:["Customer","گاہک"],
+ total:["Total","کل"], balance:["Balance","بقایا"], paid:["Paid","ادا شدہ"], walkin:["Walk-in","عام گاہک"], walkinCust:["Walk-in customer","عام گاہک"], items:["items","آئٹمز"],
+ addItem:["Add Item","زیور شامل کریں"], pickStock:["Select from stock (tag)","اسٹاک سے منتخب کریں (ٹیگ)"], manual:["— Enter manually —","— خود درج کریں —"],
+ itemName:["Item name","نام"], karat:["Karat","قیراط"], gross:["Gross weight (g)","کل وزن (گرام)"], stoneWt:["Stone weight (g)","نگ کا وزن (گرام)"],
+ wastagePct:["Wastage %","چھیجت %"], making:["Making charges","مزدوری"], perGramOpt:["Per gram","فی گرام"], fixed:["Fixed","فکسڈ"],
+ makingRate:["Making rate (Rs)","مزدوری ریٹ (روپے)"], stonePrice:["Stone price (Rs)","نگ کی قیمت (روپے)"], addToBill:["+ Add to bill","+ بل میں شامل کریں"],
+ item:["Item","آئٹم"], weight:["Weight","وزن"], noItems:["No items yet. Add one using the form.","ابھی کوئی آئٹم نہیں۔ فارم سے شامل کریں۔"],
+ oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (g)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
+ discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
+ netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
+ itemTotal:["Item total","آئٹم کل"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
+ grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
+ enterWeight:["Please enter the weight","وزن درج کریں"], itemAdded:["Item added","آئٹم شامل ہو گیا"], addFirst:["Add an item first","پہلے آئٹم شامل کریں"],
+ pickCust:["Select a customer to record credit","ادھار کے لیے گاہک منتخب کریں"], close:["Close","بند کریں"], printNote:["Printing will be tested in Phase 3.","پرنٹنگ فیز 3 میں ٹیسٹ ہوگی۔"],
+ inShop:["in shop","دکان میں"], fullReport:["Full stock report","مکمل اسٹاک رپورٹ"], newStock:["Add New Item","نیا زیور شامل کریں"], tag:["Tag","ٹیگ"], category:["Category","قسم"],
+ addToStock:["+ Add to stock","+ اسٹاک میں شامل کریں"], all:["All","سب"], inShopF:["In shop","دکان میں"], soldF:["Sold","فروخت شدہ"], valueToday:["Value today","آج کی قیمت"],
+ status:["Status","حالت"], valueNote:["Value is for gold only (excluding making charges), at today's rate.","قیمت صرف سونے کی ہے (مزدوری کے بغیر)، آج کے ریٹ پر۔"],
+ tagWt:["Enter a tag and weight","ٹیگ اور وزن درج کریں"], tagExists:["This tag already exists","یہ ٹیگ پہلے سے موجود ہے"], addedStock:["Added to stock","اسٹاک میں شامل ہو گیا"],
+ stockReport:["Stock Report","اسٹاک رپورٹ"], totalItems:["Total items","کل آئٹمز"], grossWt:["Gross weight","کل وزن"], netGold:["Net gold (excl. stones)","خالص سونا (نگ کے بغیر)"],
+ byKarat:["By karat","قیراط کے لحاظ سے"], byCat:["By category","قسم کے لحاظ سے"], allItems:["All items","تمام آئٹمز"], tola:["Tola","تولہ"], value:["Value","قیمت"],
+ reportNote:["Gold value only, at today's rate (24K: {0}/tola). Making charges and stones are not included.","صرف سونے کی قیمت، آج کے ریٹ پر (24K: {0} فی تولہ)۔ مزدوری اور نگ شامل نہیں۔"],
+ karigarSub:["Gold issued, jewellery received and making charges","سونا دینا، زیور وصول کرنا اور مزدوری کا حساب"], goldBal:["Gold balance","باقی سونا"], makingDue:["Making due","باقی مزدوری"],
+ newKarigar:["Add Artisan","نیا کاریگر"], name:["Name","نام"], phone:["Phone","فون"], add:["+ Add","+ شامل کریں"], newEntry:["{0} — New Entry","{0} — نیا اندراج"],
+ issue:["Gold issued","سونا دیا"], receive:["Jewellery received","زیور وصول"], pay:["Payment made","ادائیگی"], jewWt:["Jewellery weight (g)","زیور کا وزن (گرام)"],
+ wastG:["Wastage (g)","چھیجت (گرام)"], makingRs:["Making (Rs)","مزدوری (روپے)"], amountRs:["Amount (Rs)","رقم (روپے)"], note:["Note","نوٹ"], notePh:["Order reference","آرڈر کا حوالہ"],
+ save:["Save","محفوظ کریں"], history:["History","تفصیل"], entry:["Entry","اندراج"], payment:["Payment","ادائیگی"], enterName:["Please enter a name","نام درج کریں"],
+ enterAmount:["Please enter an amount","رقم درج کریں"], saved:["Saved","محفوظ ہو گیا"],
+ khataTitle:["Customer Ledger","گاہک کھاتہ"], khataSub:["Credit, advances and collections","ادھار، ایڈوانس اور وصولی"], customers:["Customers","گاہک"],
+ due:["Due {0}","واجب {0}"], advance:["Advance {0}","ایڈوانس {0}"], clear:["Clear","برابر"], newCustomer:["New customer","نیا گاہک"],
+ gotPayment:["Payment received / Advance","رقم وصول / ایڈوانس"], gaveCredit:["Credit given","ادھار دیا"], selectCust:["Select a Customer","گاہک منتخب کریں"],
+ selectHint:["Tap a customer in the list to view their full ledger.","فہرست میں کسی گاہک پر ٹیپ کریں، اس کا مکمل کھاتہ یہاں نظر آئے گا۔"], collection:["Collection","وصولی"], credit:["Credit","ادھار"],
+ last7:["Last 7 days","پچھلے 7 دن"], totalSales:["Total sales","کل سیل"], cashIn:["Cash received","وصول رقم"], goldSold:["Gold sold","فروخت شدہ سونا"], billsL:["Bills","بل"],
+ dailySales:["Daily Sales","روزانہ سیل"], goldWithK:["Gold with Artisans","کاریگروں کے پاس سونا"],
+ settingsSub:["Adjust these to match your shop's practice","اپنی دکان کے طریقے کے مطابق تبدیل کریں"], shop:["Shop","دکان"], shopName:["Shop name","دکان کا نام"], address:["Address","پتہ"], pin:["PIN","پن"],
+ rateTitle:["Today's Rate (per tola)","آج کا ریٹ (فی تولہ)"], r24:["24K (enter here)","24K (یہاں لکھیں)"], auto:["(auto)","(خودکار)"],
+ rateNote:["Enter the 24K rate only. Other karats are calculated automatically.","صرف 24K کا ریٹ لکھیں۔ باقی قیراط کا ریٹ خود بخود حساب ہو جائے گا۔"],
+ rules:["Calculation Rules","حساب کے اصول"], defWastage:["Default wastage %","ڈیفالٹ چھیجت %"], makingMethod:["Making charge method","مزدوری کا طریقہ"],
+ fixedItem:["Fixed per item","فی آئٹم فکسڈ"], oldKaat:["Old gold deduction %","پرانے سونے پر کٹوتی %"], saveSettings:["Save settings","سیٹنگز محفوظ کریں"],
+ resetDemo:["Restore demo data","ڈیمو ڈیٹا دوبارہ لوڈ کریں"], sure:["Tap again to confirm","تصدیق کے لیے دوبارہ دبائیں"], settingsSaved:["Settings saved","سیٹنگز محفوظ ہو گئیں"],
+ demoRestored:["Demo data restored","ڈیمو ڈیٹا واپس آ گیا"], billBal:["Balance of bill #{0}","بل نمبر {0} کا بقایا"]
+};
+const CATS={Ring:["Ring","انگوٹھی"],Chain:["Chain","چین"],Bangle:["Bangle","چوڑی"],Earring:["Earrings","جھمکے / بالیاں"],Set:["Set","سیٹ"],Pendant:["Pendant","لاکٹ"],Other:["Other","دیگر"]};
+let LANG="en"; try{LANG=localStorage.getItem(LANG_KEY)||"en"}catch(e){}
+const LI=()=>LANG=="ur"?1:0;
+function t(k,...a){let s=(TX[k]||[k,k])[LI()];a.forEach((v,i)=>s=s.replace("{"+i+"}",v));return s}
+const catName=c=>(CATS[c]||[c,c])[LI()];
+function setLang(l){LANG=l;try{localStorage.setItem(LANG_KEY,l)}catch(e){}render()}
+const langBtn=()=>LANG=="ur"?`<button class="lang" onclick="setLang('en')">English</button>`:`<button class="lang lang-ur" onclick="setLang('ur')">اردو</button>`;
+const LOC=()=>LANG=="ur"?"ur-PK":"en-GB";
+
+/* ===== DEMO DATA (sample) ===== */
 function dayISO(off){const d=new Date();d.setDate(d.getDate()-off);return d.toISOString().slice(0,10)}
 function demoData(){
   return {
@@ -138,10 +207,10 @@ function demoData(){
       {id:3,name:"Sadia Raza",phone:"0345-5550033"}
     ],
     ledger:[
-      {cid:1,date:dayISO(6),amt:85000,note:"Bill #1001 baqaya"},
-      {cid:1,date:dayISO(2),amt:-40000,note:"Wusooli"},
-      {cid:2,date:dayISO(4),amt:120000,note:"Bridal order advance baqi"},
-      {cid:3,date:dayISO(1),amt:-25000,note:"Advance jama"}
+      {cid:1,date:dayISO(6),amt:85000,note:"Balance of bill #1001"},
+      {cid:1,date:dayISO(2),amt:-40000,note:"Collection"},
+      {cid:2,date:dayISO(4),amt:120000,note:"Bridal order balance"},
+      {cid:3,date:dayISO(1),amt:-25000,note:"Advance deposited"}
     ],
     bills:[
       {no:1001,date:dayISO(6),cid:1,total:385000,paid:300000,gold:8.6},
@@ -150,11 +219,11 @@ function demoData(){
       {no:1004,date:dayISO(1),cid:3,total:298000,paid:298000,gold:6.9},
       {no:1005,date:dayISO(0),cid:0,total:176400,paid:176400,gold:4.0}
     ],
-    karigars:[{id:1,name:"Ustad Rafiq",phone:"0312-5550044"},{id:2,name:"Imran Karigar",phone:"0301-5550055"}],
+    karigars:[{id:1,name:"Ustad Rafiq",phone:"0312-5550044"},{id:2,name:"Imran",phone:"0301-5550055"}],
     kentries:[
-      {kid:1,date:dayISO(8),type:"issue",wt:50,karat:"22K",note:"Bridal set ke liye"},
-      {kid:1,date:dayISO(3),type:"receive",wt:46.5,wast:2.5,maz:35000,note:"Set wapas"},
-      {kid:1,date:dayISO(2),type:"pay",amt:20000,note:"Mazdoori"},
+      {kid:1,date:dayISO(8),type:"issue",wt:50,karat:"22K",note:"Bridal set order"},
+      {kid:1,date:dayISO(3),type:"receive",wt:46.5,wast:2.5,maz:35000,note:"Bridal set returned"},
+      {kid:1,date:dayISO(2),type:"pay",amt:20000,note:"Making charges"},
       {kid:2,date:dayISO(5),type:"issue",wt:20,karat:"21K",note:"4 rings"},
       {kid:2,date:dayISO(1),type:"receive",wt:10.2,wast:0.6,maz:8000,note:"2 rings"}
     ],
@@ -173,15 +242,15 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rs=n=>"Rs "+Math.round(n).toLocaleString("en-PK");
 const g=n=>(+n).toFixed(2)+" g";
-function tmr(grams){let t=Math.floor(grams/TOLA_G),r=grams-t*TOLA_G,m=Math.floor(r/MASHA_G);r-=m*MASHA_G;const ra=(r/RATTI_G).toFixed(1);return `${t}T ${m}M ${ra}R`}
-/* Sirf 24K ka rate haath se; baqi karat khud: 24K rate x karat / 24 */
+function tmr(grams){let tt=Math.floor(grams/TOLA_G),r=grams-tt*TOLA_G,m=Math.floor(r/MASHA_G);r-=m*MASHA_G;const ra=(r/RATTI_G).toFixed(1);return `${tt}T ${m}M ${ra}R`}
+/* Only the 24K rate is entered; other karats = 24K rate x karat / 24 */
 const rateOf=k=>Math.round((S.settings.rates["24K"]||0)*parseInt(k)/24);
 const val=(grams,karat)=>grams/TOLA_G*rateOf(karat);
 const today=()=>new Date().toISOString().slice(0,10);
-const fmtD=d=>new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+const fmtD=d=>new Date(d+"T00:00").toLocaleDateString(LOC(),{day:"numeric",month:"short"});
 const cust=id=>S.customers.find(c=>c.id==id);
 const custBal=id=>S.ledger.filter(l=>l.cid==id).reduce((a,b)=>a+b.amt,0);
-function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+function toast(m){const el=document.createElement("div");el.className="toast";el.textContent=m;document.body.appendChild(el);setTimeout(()=>el.remove(),1800)}
 const num=id=>parseFloat(($("#"+id)||{}).value)||0;
 
 /* ===== ICONS ===== */
@@ -195,45 +264,47 @@ const I={
  settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'
 };
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
-const NAV=[["home","Dashboard"],["bill","New Bill"],["stock","Stock"],["karigar","Karigar"],["khata","Khata"],["report","Reports"],["settings","Settings"]];
+const NAV=[["home","dashboard"],["bill","newBill"],["stock","stock"],["karigar","karigar"],["khata","khata"],["report","reports"],["settings","settings"]];
 
 /* ===== SHELL ===== */
 function render(){
+  document.documentElement.lang=LANG; document.documentElement.dir=LANG=="ur"?"rtl":"ltr";
   if(!loggedIn){
     $("#root").innerHTML=`<div class="login"><form class="panel" onsubmit="event.preventDefault();doLogin()">
-      <h1>${esc(S.settings.shop)}</h1><span class="muted small">Sarafa Manager <span class="demo-tag">DEMO</span></span>
-      <label>PIN darj karein<input id="pin" type="password" inputmode="numeric" value="1234" autocomplete="off"></label>
-      <button class="btn">Login</button><span class="muted small">Demo PIN: 1234</span></form></div>`;return;
+      <div class="row" style="justify-content:flex-end">${langBtn()}</div>
+      <h1>${esc(S.settings.shop)}</h1><span class="muted small">${t("brandSub")}</span>
+      <label>${t("enterPin")}<input id="pin" type="password" inputmode="numeric" value="1234" autocomplete="off"></label>
+      <button class="btn">${t("login")}</button><span class="muted small">${t("demoPin")}</span></form></div>`;return;
   }
   $("#root").innerHTML=`<div class="app"><nav class="rail">
-    <div class="brand"><b>${esc(S.settings.shop)}</b><small>Sarafa Manager · Demo</small></div>
-    ${NAV.map(([k,l])=>`<button class="nav ${screen==k?"on":""}" onclick="go('${k}')">${icon(k)}<span>${l}</span></button>`).join("")}
+    <div class="brand"><b>${esc(S.settings.shop)}</b><small>${t("brandSub")}</small></div>
+    ${NAV.map(([k,l])=>`<button class="nav ${screen==k?"on":""}" onclick="go('${k}')">${icon(k)}<span>${t(l)}</span></button>`).join("")}
   </nav><main><div class="wrap" id="main"></div></main></div>`;
   ({home:Home,bill:Bill,stock:Stock,karigar:Karigar,khata:Khata,report:Report,settings:Settings})[screen]();
 }
 function go(k){screen=k;render();window.scrollTo(0,0)}
-function doLogin(){if($("#pin").value===S.settings.pin){loggedIn=true;render()}else toast("PIN ghalat hai")}
-function head(t,sub,extra=""){return `<div class="top"><div><h1>${t}</h1>${sub?`<p>${sub}</p>`:""}</div>${extra}</div>`}
+function doLogin(){if($("#pin").value===S.settings.pin){loggedIn=true;render()}else toast(t("wrongPin"))}
+function head(title,sub,extra=""){return `<div class="top"><div><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div><div class="row">${extra}${langBtn()}</div></div>`}
 
 /* ===== DASHBOARD ===== */
 function Home(){
-  const t=today(), tb=S.bills.filter(b=>b.date==t);
+  const td=today(), tb=S.bills.filter(b=>b.date==td);
   const sale=tb.reduce((a,b)=>a+b.total,0), cash=tb.reduce((a,b)=>a+b.paid,0);
   const inStock=S.stock.filter(s=>!s.sold), stockWt=inStock.reduce((a,s)=>a+s.gross,0);
   const udhaar=S.customers.reduce((a,c)=>a+Math.max(0,custBal(c.id)),0);
-  $("#main").innerHTML=head("Assalam o Alaikum",new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),`<button class="btn" onclick="go('bill')">+ New Bill</button>`)+`
-  <section class="panel"><div class="row"><h2>Aaj ka rate</h2><span class="muted small">per tola</span><span class="spacer"></span><button class="btn ghost sm" onclick="go('settings')">Rate badlein</button></div>
+  $("#main").innerHTML=head(t("greeting"),new Date().toLocaleDateString(LOC(),{weekday:"long",day:"numeric",month:"long",year:"numeric"}),`<button class="btn" onclick="go('bill')">+ ${t("newBill")}</button>`)+`
+  <section class="panel"><div class="row"><h2>${t("todayRate")}</h2><span class="muted small">${t("perTola")}</span><span class="spacer"></span><button class="btn ghost sm" onclick="go('settings')">${t("updateRate")}</button></div>
    <div class="rates">${KARATS.map(k=>`<div class="rate"><small>${k}</small><b class="num">${rateOf(k).toLocaleString("en-PK")}</b></div>`).join("")}</div>
-   <div class="row"><span class="muted small">per gram</span></div>
-   <div class="rates" style="grid-template-columns:repeat(2,1fr)">${["22K","21K"].map(k=>`<div class="rate"><small>${k} · per gram</small><b class="num">${Math.round(rateOf(k)/TOLA_G).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
+   <div class="row"><span class="muted small">${t("perGram")}</span></div>
+   <div class="rates" style="grid-template-columns:repeat(2,1fr)">${["22K","21K"].map(k=>`<div class="rate"><small>${k} · ${t("perGram")}</small><b class="num">${Math.round(rateOf(k)/TOLA_G).toLocaleString("en-PK")}</b></div>`).join("")}</div></section>
   <section class="grid">
-   <div class="panel stat"><span>Aaj ki sale</span><b class="num gold">${rs(sale)}</b><small class="muted">${tb.length} bill</small></div>
-   <div class="panel stat"><span>Aaj ka cash</span><b class="num">${rs(cash)}</b></div>
-   <button class="panel stat" style="text-align:left;cursor:pointer" onclick="stockPreview()"><span>Stock mein</span><b class="num">${g(stockWt)}</b><small class="muted">${inStock.length} items · ${tmr(stockWt)}</small><small style="color:var(--accent);font-weight:600">Poora stock dekhein →</small></button>
-   <div class="panel stat"><span>Kul udhaar</span><b class="num" style="color:var(--warn)">${rs(udhaar)}</b></div>
+   <div class="panel stat"><span>${t("todaySales")}</span><b class="num gold">${rs(sale)}</b><small class="muted">${tb.length} ${t("bills")}</small></div>
+   <div class="panel stat"><span>${t("todayCash")}</span><b class="num">${rs(cash)}</b></div>
+   <button class="panel stat" style="text-align:start;cursor:pointer" onclick="stockPreview()"><span>${t("inStock")}</span><b class="num">${g(stockWt)}</b><small class="muted">${inStock.length} ${t("items")} · ${tmr(stockWt)}</small><small style="color:var(--accent);font-weight:600">${t("viewStock")}</small></button>
+   <div class="panel stat"><span>${t("receivables")}</span><b class="num" style="color:var(--warn)">${rs(udhaar)}</b></div>
   </section>
-  <section class="panel"><h2>Haal ke bills</h2><div class="tbl"><table><tr><th>Bill</th><th>Date</th><th>Customer</th><th class="r">Total</th><th class="r">Baqi</th></tr>
-   ${S.bills.slice(-6).reverse().map(b=>`<tr><td>#${b.no}</td><td>${fmtD(b.date)}</td><td>${esc(cust(b.cid)?.name||"Walk-in")}</td><td class="r num">${rs(b.total)}</td><td class="r num">${b.total-b.paid>0?`<span class="pill due">${rs(b.total-b.paid)}</span>`:`<span class="pill ok">Clear</span>`}</td></tr>`).join("")}
+  <section class="panel"><h2>${t("recentBills")}</h2><div class="tbl"><table><tr><th>${t("bill")}</th><th>${t("date")}</th><th>${t("customer")}</th><th class="r">${t("total")}</th><th class="r">${t("balance")}</th></tr>
+   ${S.bills.slice(-6).reverse().map(b=>`<tr><td>#${b.no}</td><td>${fmtD(b.date)}</td><td>${esc(cust(b.cid)?.name||t("walkin"))}</td><td class="r num">${rs(b.total)}</td><td class="r num">${b.total-b.paid>0?`<span class="pill due">${rs(b.total-b.paid)}</span>`:`<span class="pill ok">${t("paid")}</span>`}</td></tr>`).join("")}
   </table></div></section>`;
 }
 
@@ -245,80 +316,80 @@ function itemCalc(it){
 }
 function Bill(){
   const st=S.settings;
-  $("#main").innerHTML=head("New Bill",`Bill #${S.nextBill} · ${fmtD(today())}`)+`
+  $("#main").innerHTML=head(t("newBill"),`${t("bill")} #${S.nextBill} · ${fmtD(today())}`)+`
   <div class="g2">
-  <section class="panel"><h2>Zewar shamil karein</h2>
-   <label>Stock se chunein (tag)<select id="bTag" onchange="pickTag()"><option value="">— Haath se likhein —</option>
+  <section class="panel"><h2>${t("addItem")}</h2>
+   <label>${t("pickStock")}<select id="bTag" onchange="pickTag()"><option value="">${t("manual")}</option>
     ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross}g</option>`).join("")}</select></label>
    <div class="fields">
-    <label>Naam<input id="bName" placeholder="e.g. Ring"></label>
-    <label>Karat<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
-    <label>Kul wazan (g)<input id="bGross" type="number" step="0.01" oninput="live()"></label>
-    <label>Nag wazan (g)<input id="bNag" type="number" step="0.01" value="0" oninput="live()"></label>
-    <label>Wastage %<input id="bWast" type="number" step="0.1" value="${st.wastage}" oninput="live()"></label>
-    <label>Mazdoori<select id="bMazType" oninput="live()"><option value="gram" ${st.mazType=="gram"?"selected":""}>Per gram</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>Fixed</option></select></label>
-    <label>Mazdoori rate (Rs)<input id="bMaz" type="number" value="${st.mazRate}" oninput="live()"></label>
-    <label>Nag qeemat (Rs)<input id="bNagP" type="number" value="0" oninput="live()"></label>
+    <label>${t("itemName")}<input id="bName" placeholder="e.g. Ring"></label>
+    <label>${t("karat")}<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k=="22K"?"selected":""}>${k}</option>`).join("")}</select></label>
+    <label>${t("gross")}<input id="bGross" type="number" step="0.01" oninput="live()"></label>
+    <label>${t("stoneWt")}<input id="bNag" type="number" step="0.01" value="0" oninput="live()"></label>
+    <label>${t("wastagePct")}<input id="bWast" type="number" step="0.1" value="${st.wastage}" oninput="live()"></label>
+    <label>${t("making")}<select id="bMazType" oninput="live()"><option value="gram" ${st.mazType=="gram"?"selected":""}>${t("perGramOpt")}</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>${t("fixed")}</option></select></label>
+    <label>${t("makingRate")}<input id="bMaz" type="number" value="${st.mazRate}" oninput="live()"></label>
+    <label>${t("stonePrice")}<input id="bNagP" type="number" value="0" oninput="live()"></label>
    </div>
    <div class="calc num" id="liveBox"></div>
-   <button class="btn" onclick="addItem()">+ Bill mein daalein</button>
+   <button class="btn" onclick="addItem()">${t("addToBill")}</button>
   </section>
-  <section class="panel"><h2>Bill</h2>
-   <label>Customer<select id="bCust"><option value="0">Walk-in customer</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></label>
-   <div class="tbl"><table><tr><th>Item</th><th>Wazan</th><th class="r">Rs</th><th></th></tr>
-    ${cart.length?cart.map((it,i)=>{const c=itemCalc(it);return `<tr><td>${esc(it.name)}<div class="muted small">${it.karat}${it.tag?" · "+it.tag:""}</div></td><td class="num small">${g(c.goldWt)}<div class="muted">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.total)}</td><td><button class="btn ghost sm" onclick="cart.splice(${i},1);Bill()">✕</button></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">Abhi koi item nahi. Baen taraf se shamil karein.</td></tr>`}
+  <section class="panel"><h2>${t("bill")}</h2>
+   <label>${t("customer")}<select id="bCust"><option value="0">${t("walkinCust")}</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></label>
+   <div class="tbl"><table><tr><th>${t("item")}</th><th>${t("weight")}</th><th class="r">Rs</th><th></th></tr>
+    ${cart.length?cart.map((it,i)=>{const c=itemCalc(it);return `<tr><td>${esc(it.name)}<div class="muted small">${it.karat}${it.tag?" · "+it.tag:""}</div></td><td class="num small">${g(c.goldWt)}<div class="muted">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.total)}</td><td><button class="btn ghost sm" onclick="cart.splice(${i},1);Bill()">✕</button></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">${t("noItems")}</td></tr>`}
    </table></div>
-   <details ${oldGold?"open":""}><summary style="cursor:pointer;font-weight:600">Purana sona (exchange)</summary>
+   <details ${oldGold?"open":""}><summary style="cursor:pointer;font-weight:600">${t("oldGold")}</summary>
     <div class="fields" style="margin-top:10px">
-     <label>Wazan (g)<input id="oWt" type="number" step="0.01" value="${oldGold?.wt||""}" oninput="setOld()"></label>
-     <label>Test karat<select id="oKarat" oninput="setOld()">${KARATS.map(k=>`<option ${(oldGold?.karat||"21K")==k?"selected":""}>${k}</option>`).join("")}</select></label>
-     <label>Kaat %<input id="oKaat" type="number" step="0.1" value="${oldGold?.kaat??st.kaat}" oninput="setOld()"></label>
+     <label>${t("weightG")}<input id="oWt" type="number" step="0.01" value="${oldGold?.wt||""}" oninput="setOld()"></label>
+     <label>${t("testKarat")}<select id="oKarat" oninput="setOld()">${KARATS.map(k=>`<option ${(oldGold?.karat||"21K")==k?"selected":""}>${k}</option>`).join("")}</select></label>
+     <label>${t("deduction")}<input id="oKaat" type="number" step="0.1" value="${oldGold?.kaat??st.kaat}" oninput="setOld()"></label>
     </div></details>
-   <div class="fields"><label>Discount (Rs)<input id="bDisc" type="number" value="0" oninput="totals()"></label><label>Wusool (Rs)<input id="bPaid" type="number" oninput="totals()"></label></div>
+   <div class="fields"><label>${t("discountRs")}<input id="bDisc" type="number" value="0" oninput="totals()"></label><label>${t("receivedRs")}<input id="bPaid" type="number" oninput="totals()"></label></div>
    <div class="calc num" id="totBox"></div>
-   <button class="btn" onclick="saveBill()">Bill save karein</button>
+   <button class="btn" onclick="saveBill()">${t("saveBill")}</button>
   </section></div>`;
   live();totals();
 }
-function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Zewar",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
+function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Jewellery",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
 function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s)return;$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bGross").value=s.gross;$("#bNag").value=s.nag;live()}
 function live(){const it=readItem(),c=itemCalc(it);$("#liveBox").innerHTML=`
- <div><span>Khalis wazan</span><span>${g(c.net)}</span></div>
- <div><span>Wastage</span><span>${g(c.wast)}</span></div>
- <div><span>Sone ka wazan</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
- <div><span>Sona (${it.karat} @ ${rs(rateOf(it.karat))}/tola)</span><span>${rs(c.goldVal)}</span></div>
- <div><span>Mazdoori</span><span>${rs(c.maz)}</span></div>
- <div><span>Nag</span><span>${rs(it.nagPrice)}</span></div>
- <div class="tot"><span>Item total</span><span class="gold">${rs(c.total)}</span></div>`}
-function addItem(){const it=readItem();if(it.gross<=0){toast("Wazan likhein");return}cart.push(it);Bill();toast("Item shamil ho gaya")}
+ <div><span>${t("netWt")}</span><span>${g(c.net)}</span></div>
+ <div><span>${t("wastage")}</span><span>${g(c.wast)}</span></div>
+ <div><span>${t("goldWt")}</span><span>${g(c.goldWt)} · ${tmr(c.goldWt)}</span></div>
+ <div><span>${t("gold")} (${it.karat} @ ${rs(rateOf(it.karat))}/${t("tola")})</span><span>${rs(c.goldVal)}</span></div>
+ <div><span>${t("makingL")}</span><span>${rs(c.maz)}</span></div>
+ <div><span>${t("stone")}</span><span>${rs(it.nagPrice)}</span></div>
+ <div class="tot"><span>${t("itemTotal")}</span><span class="gold">${rs(c.total)}</span></div>`}
+function addItem(){const it=readItem();if(it.gross<=0){toast(t("enterWeight"));return}cart.push(it);Bill();toast(t("itemAdded"))}
 function setOld(){const wt=num("oWt");oldGold=wt>0?{wt,karat:$("#oKarat").value,kaat:num("oKaat")}:null;totals()}
 function oldVal(){return oldGold?val(oldGold.wt*(1-oldGold.kaat/100),oldGold.karat):0}
 function billTotals(){const sub=cart.reduce((a,it)=>a+itemCalc(it).total,0),ov=oldVal(),disc=num("bDisc");const total=Math.max(0,sub-ov-disc);const p=$("#bPaid")?.value;const paid=p===""||p==null?total:+p;return {sub,ov,disc,total,paid,baqi:total-paid}}
-function totals(){const t=billTotals();$("#totBox").innerHTML=`
- <div><span>Items</span><span>${rs(t.sub)}</span></div>
- ${t.ov?`<div><span>Purana sona minus</span><span>− ${rs(t.ov)}</span></div>`:""}
- ${t.disc?`<div><span>Discount</span><span>− ${rs(t.disc)}</span></div>`:""}
- <div class="tot"><span>Kul raqam</span><span class="gold">${rs(t.total)}</span></div>
- <div><span>Wusool</span><span>${rs(t.paid)}</span></div>
- <div><span>Baqi (khata mein)</span><span style="color:${t.baqi>0?"var(--warn)":"inherit"}">${rs(Math.max(0,t.baqi))}</span></div>`}
+function totals(){const x=billTotals();$("#totBox").innerHTML=`
+ <div><span>${t("itemsL")}</span><span>${rs(x.sub)}</span></div>
+ ${x.ov?`<div><span>${t("lessOld")}</span><span>− ${rs(x.ov)}</span></div>`:""}
+ ${x.disc?`<div><span>${t("discount")}</span><span>− ${rs(x.disc)}</span></div>`:""}
+ <div class="tot"><span>${t("grandTotal")}</span><span class="gold">${rs(x.total)}</span></div>
+ <div><span>${t("received")}</span><span>${rs(x.paid)}</span></div>
+ <div><span>${t("balLedger")}</span><span style="color:${x.baqi>0?"var(--warn)":"inherit"}">${rs(Math.max(0,x.baqi))}</span></div>`}
 function saveBill(){
-  if(!cart.length){toast("Pehle item shamil karein");return}
-  const t=billTotals(),cid=+$("#bCust").value;
-  if(t.baqi>0&&!cid){toast("Udhaar ke liye customer chunein");return}
+  if(!cart.length){toast(t("addFirst"));return}
+  const x=billTotals(),cid=+$("#bCust").value;
+  if(x.baqi>0&&!cid){toast(t("pickCust"));return}
   const gold=cart.reduce((a,it)=>a+itemCalc(it).goldWt,0);
-  const bill={no:S.nextBill++,date:today(),cid,total:t.total,paid:t.paid,gold,items:cart.map(it=>({...it,calc:itemCalc(it)})),old:oldGold?{...oldGold,val:t.ov}:null,disc:t.disc,sub:t.sub};
+  const bill={no:S.nextBill++,date:today(),cid,total:x.total,paid:x.paid,gold,items:cart.map(it=>({...it,calc:itemCalc(it)})),old:oldGold?{...oldGold,val:x.ov}:null,disc:x.disc,sub:x.sub};
   S.bills.push(bill);
-  cart.forEach(it=>{const s=S.stock.find(x=>x.tag==it.tag);if(s)s.sold=true});
-  if(t.baqi>0)S.ledger.push({cid,date:today(),amt:t.baqi,note:`Bill #${bill.no} baqaya`});
+  cart.forEach(it=>{const s=S.stock.find(y=>y.tag==it.tag);if(s)s.sold=true});
+  if(x.baqi>0)S.ledger.push({cid,date:today(),amt:x.baqi,note:`Balance of bill #${bill.no}`});
   cart=[];oldGold=null;save();Bill();showReceipt(bill);
 }
 
-/* ===== URDU RECEIPT ===== */
+/* ===== RECEIPT (Urdu + English on every bill) ===== */
 function showReceipt(b){
   const st=S.settings,c=cust(b.cid);
   const L=(ur,en,v,cls="")=>`<div class="line ${cls}"><span><span class="ur">${ur}</span> <small style="color:#7a6f5a">${en}</small></span><span class="num">${v}</span></div>`;
   const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
-  ov.innerHTML=`<div class="modal"><div class="row"><h2>Bill #${b.no}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">Band karein</button></div>
+  ov.innerHTML=`<div class="modal"><div class="row"><h2>${t("bill")} #${b.no}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">${t("close")}</button></div>
   <div class="receipt"><h3>${esc(st.shop)}</h3><div style="text-align:center;font-size:.75rem;color:#7a6f5a">${esc(st.address)} · ${esc(st.phone)}</div>
    <div class="ur" style="text-align:center;font-size:1.1rem;margin:6px 0">رسید</div>
    ${L("گاہک","Customer",esc(c?.name||"Walk-in"))}${L("تاریخ","Date",fmtD(b.date))}
@@ -326,8 +397,8 @@ function showReceipt(b){
      ${L("وزن","Weight",`${g(it.calc.goldWt)} (${tmr(it.calc.goldWt)})`)}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
    ${b.old?L("پرانا سونا","Old gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
    ${L("کل رقم","Total",rs(b.total),"big")}${L("وصول","Received",rs(b.paid))}${L("باقی","Balance",rs(Math.max(0,b.total-b.paid)),"big")}
-   <div class="ur" style="text-align:center;margin-top:8px">خریداری کا شکریہ</div></div>
-  <p class="muted small" style="margin:0">Printer se print Phase 3 mein test hoga.</p></div>`;
+   <div class="ur" style="text-align:center;margin-top:8px">خریداری کا شکریہ</div><div style="text-align:center;font-size:.75rem;color:#7a6f5a">Thank you for your purchase</div></div>
+  <p class="muted small" style="margin:0">${t("printNote")}</p></div>`;
   document.body.appendChild(ov);
 }
 
@@ -336,23 +407,23 @@ let stockFilter="all";
 function Stock(){
   const list=S.stock.filter(s=>stockFilter=="all"||(stockFilter=="in"?!s.sold:s.sold));
   const inS=S.stock.filter(s=>!s.sold);
-  $("#main").innerHTML=head("Stock",`${inS.length} items · ${g(inS.reduce((a,s)=>a+s.gross,0))} dukaan mein`,`<button class="btn" onclick="stockPreview()">Stock ka poora preview</button>`)+`
-  <section class="panel"><h2>Naya zewar</h2><div class="fields">
-   <label>Tag<input id="sTag" placeholder="R-103"></label><label>Naam<input id="sName" placeholder="Ladies Ring"></label>
-   <label>Qism<select id="sCat">${["Ring","Chain","Bangle","Earring","Set","Pendant","Other"].map(c=>`<option>${c}</option>`).join("")}</select></label>
-   <label>Karat<select id="sKarat">${KARATS.map(k=>`<option>${k}</option>`).join("")}</select></label>
-   <label>Kul wazan (g)<input id="sGross" type="number" step="0.01"></label><label>Nag wazan (g)<input id="sNag" type="number" step="0.01" value="0"></label>
-  </div><div><button class="btn" onclick="addStock()">+ Stock mein daalein</button></div></section>
-  <section class="panel"><div class="row">${[["all","Sab"],["in","Dukaan mein"],["sold","Bik gaye"]].map(([k,l])=>`<button class="chip ${stockFilter==k?"on":""}" onclick="stockFilter='${k}';Stock()">${l}</button>`).join("")}</div>
-  <div class="tbl"><table><tr><th>Tag</th><th>Naam</th><th>Karat</th><th class="r">Wazan</th><th class="r">Aaj ki qeemat</th><th>Halat</th></tr>
-   ${list.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}<div class="muted small">${esc(s.cat)}</div></td><td>${s.karat}</td><td class="r num">${g(s.gross)}<div class="muted small">${tmr(s.gross)}</div></td><td class="r num">${rs(val(s.gross-s.nag,s.karat))}</td><td>${s.sold?'<span class="pill off">Bik gaya</span>':'<span class="pill ok">Dukaan mein</span>'}</td></tr>`).join("")}
-  </table></div><p class="muted small" style="margin:0">Qeemat sirf sone ki hai (mazdoori ke baghair), aaj ke rate par.</p></section>`;
+  $("#main").innerHTML=head(t("stock"),`${inS.length} ${t("items")} · ${g(inS.reduce((a,s)=>a+s.gross,0))} ${t("inShop")}`,`<button class="btn" onclick="stockPreview()">${t("fullReport")}</button>`)+`
+  <section class="panel"><h2>${t("newStock")}</h2><div class="fields">
+   <label>${t("tag")}<input id="sTag" placeholder="R-103"></label><label>${t("itemName")}<input id="sName" placeholder="Ladies Ring"></label>
+   <label>${t("category")}<select id="sCat">${Object.keys(CATS).map(c=>`<option value="${c}">${catName(c)}</option>`).join("")}</select></label>
+   <label>${t("karat")}<select id="sKarat">${KARATS.map(k=>`<option>${k}</option>`).join("")}</select></label>
+   <label>${t("gross")}<input id="sGross" type="number" step="0.01"></label><label>${t("stoneWt")}<input id="sNag" type="number" step="0.01" value="0"></label>
+  </div><div><button class="btn" onclick="addStock()">${t("addToStock")}</button></div></section>
+  <section class="panel"><div class="row">${[["all","all"],["in","inShopF"],["sold","soldF"]].map(([k,l])=>`<button class="chip ${stockFilter==k?"on":""}" onclick="stockFilter='${k}';Stock()">${t(l)}</button>`).join("")}</div>
+  <div class="tbl"><table><tr><th>${t("tag")}</th><th>${t("itemName")}</th><th>${t("karat")}</th><th class="r">${t("weight")}</th><th class="r">${t("valueToday")}</th><th>${t("status")}</th></tr>
+   ${list.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}<div class="muted small">${esc(catName(s.cat))}</div></td><td>${s.karat}</td><td class="r num">${g(s.gross)}<div class="muted small">${tmr(s.gross)}</div></td><td class="r num">${rs(val(s.gross-s.nag,s.karat))}</td><td>${s.sold?`<span class="pill off">${t("soldF")}</span>`:`<span class="pill ok">${t("inShopF")}</span>`}</td></tr>`).join("")}
+  </table></div><p class="muted small" style="margin:0">${t("valueNote")}</p></section>`;
 }
-function addStock(){const tag=$("#sTag").value.trim(),gross=num("sGross");if(!tag||gross<=0){toast("Tag aur wazan likhein");return}
-  if(S.stock.some(s=>s.tag==tag)){toast("Ye tag pehle se hai");return}
-  S.stock.push({tag,name:$("#sName").value||"Zewar",cat:$("#sCat").value,karat:$("#sKarat").value,gross,nag:num("sNag"),sold:false});save();Stock();toast("Stock mein shamil")}
+function addStock(){const tag=$("#sTag").value.trim(),gross=num("sGross");if(!tag||gross<=0){toast(t("tagWt"));return}
+  if(S.stock.some(s=>s.tag==tag)){toast(t("tagExists"));return}
+  S.stock.push({tag,name:$("#sName").value||"Jewellery",cat:$("#sCat").value,karat:$("#sKarat").value,gross,nag:num("sNag"),sold:false});save();Stock();toast(t("addedStock"))}
 
-/* ===== STOCK PREVIEW (poori report) ===== */
+/* ===== STOCK REPORT (full preview) ===== */
 function stockPreview(){
   const st=S.settings, inS=S.stock.filter(s=>!s.sold);
   const sum=list=>{const gross=list.reduce((a,s)=>a+s.gross,0),nag=list.reduce((a,s)=>a+(s.nag||0),0),net=gross-nag,value=list.reduce((a,s)=>a+val(s.gross-(s.nag||0),s.karat),0);return {n:list.length,gross,nag,net,value}};
@@ -360,112 +431,112 @@ function stockPreview(){
   const byK=KARATS.map(k=>({k,...sum(inS.filter(s=>s.karat==k))})).filter(r=>r.n);
   const cats=[...new Set(inS.map(s=>s.cat))];
   const byC=cats.map(c=>({c,...sum(inS.filter(s=>s.cat==c))}));
-  const T=(h,rows)=>`<div class="tbl"><table style="font-size:.78rem;color:#1d1a15"><tr>${h.map((x,i)=>`<th style="color:#7a6f5a${i?";text-align:right":""}">${x}</th>`).join("")}</tr>${rows}</table></div>`;
+  const T=(h,rows)=>`<div class="tbl"><table style="font-size:.78rem;color:#1d1a15"><tr>${h.map((x,i)=>`<th style="color:#7a6f5a${i?";text-align:end":""}">${x}</th>`).join("")}</tr>${rows}</table></div>`;
   const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
-  ov.innerHTML=`<div class="modal" style="max-width:640px"><div class="row"><h2>Stock Report</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">Band karein</button></div>
-  <div class="receipt"><h3>${esc(st.shop)}</h3><div style="text-align:center;font-size:.75rem;color:#7a6f5a">Stock Report · ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}</div>
+  ov.innerHTML=`<div class="modal" style="max-width:640px"><div class="row"><h2>${t("stockReport")}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">${t("close")}</button></div>
+  <div class="receipt"><h3>${esc(st.shop)}</h3><div style="text-align:center;font-size:.75rem;color:#7a6f5a">${t("stockReport")} · ${new Date().toLocaleDateString(LOC(),{day:"numeric",month:"long",year:"numeric"})}</div>
    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0">
-    <div><small style="color:#7a6f5a">Kul items</small><div class="big num">${all.n}</div></div>
-    <div><small style="color:#7a6f5a">Kul wazan</small><div class="big num">${g(all.gross)}</div><small class="num">${tmr(all.gross)}</small></div>
-    <div><small style="color:#7a6f5a">Khalis sona (nag minus)</small><div class="big num">${g(all.net)}</div><small class="num">${tmr(all.net)}</small></div>
-    <div><small style="color:#7a6f5a">Aaj ki qeemat</small><div class="big num">${rs(all.value)}</div></div>
+    <div><small style="color:#7a6f5a">${t("totalItems")}</small><div class="big num">${all.n}</div></div>
+    <div><small style="color:#7a6f5a">${t("grossWt")}</small><div class="big num">${g(all.gross)}</div><small class="num">${tmr(all.gross)}</small></div>
+    <div><small style="color:#7a6f5a">${t("netGold")}</small><div class="big num">${g(all.net)}</div><small class="num">${tmr(all.net)}</small></div>
+    <div><small style="color:#7a6f5a">${t("valueToday")}</small><div class="big num">${rs(all.value)}</div></div>
    </div>
-   <div style="font-weight:700;margin-top:6px">Karat ke hisaab se</div>
-   ${T(["Karat","Items","Wazan","Tola","Qeemat"],byK.map(r=>`<tr><td>${r.k}</td><td class="r num">${r.n}</td><td class="r num">${g(r.net)}</td><td class="r num">${tmr(r.net)}</td><td class="r num">${rs(r.value)}</td></tr>`).join(""))}
-   <div style="font-weight:700;margin-top:10px">Qism ke hisaab se</div>
-   ${T(["Qism","Items","Wazan","Qeemat"],byC.map(r=>`<tr><td>${esc(r.c)}</td><td class="r num">${r.n}</td><td class="r num">${g(r.gross)}</td><td class="r num">${rs(r.value)}</td></tr>`).join(""))}
-   <div style="font-weight:700;margin-top:10px">Har item</div>
-   ${T(["Tag","Naam","Karat","Wazan","Qeemat"],inS.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}</td><td class="r">${s.karat}</td><td class="r num">${g(s.gross)}${s.nag?`<div style="color:#7a6f5a">nag ${g(s.nag)}</div>`:""}</td><td class="r num">${rs(val(s.gross-(s.nag||0),s.karat))}</td></tr>`).join(""))}
-   <div style="font-size:.72rem;color:#7a6f5a;margin-top:8px">Qeemat sirf sone ki hai, aaj ke rate par (24K: ${rs(rateOf("24K"))}/tola). Mazdoori aur nag ki qeemat shamil nahi.</div>
+   <div style="font-weight:700;margin-top:6px">${t("byKarat")}</div>
+   ${T([t("karat"),t("itemsL"),t("weight"),t("tola"),t("value")],byK.map(r=>`<tr><td>${r.k}</td><td class="r num">${r.n}</td><td class="r num">${g(r.net)}</td><td class="r num">${tmr(r.net)}</td><td class="r num">${rs(r.value)}</td></tr>`).join(""))}
+   <div style="font-weight:700;margin-top:10px">${t("byCat")}</div>
+   ${T([t("category"),t("itemsL"),t("weight"),t("value")],byC.map(r=>`<tr><td>${esc(catName(r.c))}</td><td class="r num">${r.n}</td><td class="r num">${g(r.gross)}</td><td class="r num">${rs(r.value)}</td></tr>`).join(""))}
+   <div style="font-weight:700;margin-top:10px">${t("allItems")}</div>
+   ${T([t("tag"),t("itemName"),t("karat"),t("weight"),t("value")],inS.map(s=>`<tr><td><b>${esc(s.tag)}</b></td><td>${esc(s.name)}</td><td class="r">${s.karat}</td><td class="r num">${g(s.gross)}${s.nag?`<div style="color:#7a6f5a">${t("stone")} ${g(s.nag)}</div>`:""}</td><td class="r num">${rs(val(s.gross-(s.nag||0),s.karat))}</td></tr>`).join(""))}
+   <div style="font-size:.72rem;color:#7a6f5a;margin-top:8px">${t("reportNote",rs(rateOf("24K")))}</div>
   </div></div>`;
   document.body.appendChild(ov);
 }
 
-/* ===== KARIGAR ===== */
+/* ===== ARTISANS (KARIGAR) ===== */
 let selK=1;
 function kBal(id){let gold=0,cash=0;S.kentries.filter(e=>e.kid==id).forEach(e=>{if(e.type=="issue")gold+=e.wt;if(e.type=="receive"){gold-=e.wt+(e.wast||0);cash+=e.maz||0}if(e.type=="pay")cash-=e.amt});return {gold,cash}}
 function Karigar(){
   const k=S.karigars.find(x=>x.id==selK)||S.karigars[0];if(k)selK=k.id;
   const ents=S.kentries.filter(e=>e.kid==selK).slice().reverse();
-  $("#main").innerHTML=head("Karigar","Sona dena, zewar lena, mazdoori ka hisaab")+`
-  <section class="grid">${S.karigars.map(x=>{const b=kBal(x.id);return `<button class="panel" style="text-align:left;cursor:pointer;${x.id==selK?"border-color:var(--accent)":""}" onclick="selK=${x.id};Karigar()">
+  $("#main").innerHTML=head(t("karigar"),t("karigarSub"))+`
+  <section class="grid">${S.karigars.map(x=>{const b=kBal(x.id);return `<button class="panel" style="text-align:start;cursor:pointer;${x.id==selK?"border-color:var(--accent)":""}" onclick="selK=${x.id};Karigar()">
     <h3>${esc(x.name)}</h3><span class="muted small">${esc(x.phone)}</span>
-    <div class="small num">Sona baqi: <b>${g(b.gold)}</b></div><div class="small num">Mazdoori baqi: <b>${rs(b.cash)}</b></div></button>`}).join("")}
-   <div class="panel"><h3>Naya karigar</h3><input id="kName" placeholder="Naam"><input id="kPhone" placeholder="Phone"><button class="btn sm" onclick="addK()">+ Shamil</button></div></section>
-  ${k?`<section class="panel"><h2>${esc(k.name)} — naya len-den</h2>
-   <div class="row">${[["issue","Sona diya"],["receive","Zewar liya"],["pay","Mazdoori di"]].map(([t,l])=>`<button class="chip ${kType==t?"on":""}" onclick="kType='${t}';Karigar()">${l}</button>`).join("")}</div>
-   <div class="fields">${kType=="issue"?`<label>Wazan (g)<input id="keWt" type="number" step="0.01"></label><label>Karat<select id="keK">${KARATS.map(x=>`<option>${x}</option>`).join("")}</select></label>`:
-     kType=="receive"?`<label>Zewar wazan (g)<input id="keWt" type="number" step="0.01"></label><label>Wastage (g)<input id="keW" type="number" step="0.01" value="0"></label><label>Mazdoori (Rs)<input id="keM" type="number"></label>`:
-     `<label>Raqam (Rs)<input id="keA" type="number"></label>`}
-    <label>Note<input id="keN" placeholder="Kis order ke liye"></label></div>
-   <div><button class="btn" onclick="addKE()">Save karein</button></div></section>
-  <section class="panel"><h2>Hisaab</h2><div class="tbl"><table><tr><th>Date</th><th>Kaam</th><th class="r">Sona</th><th class="r">Rs</th><th>Note</th></tr>
-   ${ents.map(e=>`<tr><td>${fmtD(e.date)}</td><td>${e.type=="issue"?'<span class="pill due">Sona diya</span>':e.type=="receive"?'<span class="pill ok">Zewar liya</span>':'<span class="pill off">Payment</span>'}</td>
-    <td class="r num">${e.type=="issue"?"+"+g(e.wt)+" "+e.karat:e.type=="receive"?"−"+g(e.wt)+(e.wast?`<div class="muted small">wastage ${g(e.wast)}</div>`:""):"—"}</td>
+    <div class="small num">${t("goldBal")}: <b>${g(b.gold)}</b></div><div class="small num">${t("makingDue")}: <b>${rs(b.cash)}</b></div></button>`}).join("")}
+   <div class="panel"><h3>${t("newKarigar")}</h3><input id="kName" placeholder="${t("name")}"><input id="kPhone" placeholder="${t("phone")}"><button class="btn sm" onclick="addK()">${t("add")}</button></div></section>
+  ${k?`<section class="panel"><h2>${t("newEntry",esc(k.name))}</h2>
+   <div class="row">${["issue","receive","pay"].map(x=>`<button class="chip ${kType==x?"on":""}" onclick="kType='${x}';Karigar()">${t(x)}</button>`).join("")}</div>
+   <div class="fields">${kType=="issue"?`<label>${t("weightG")}<input id="keWt" type="number" step="0.01"></label><label>${t("karat")}<select id="keK">${KARATS.map(x=>`<option>${x}</option>`).join("")}</select></label>`:
+     kType=="receive"?`<label>${t("jewWt")}<input id="keWt" type="number" step="0.01"></label><label>${t("wastG")}<input id="keW" type="number" step="0.01" value="0"></label><label>${t("makingRs")}<input id="keM" type="number"></label>`:
+     `<label>${t("amountRs")}<input id="keA" type="number"></label>`}
+    <label>${t("note")}<input id="keN" placeholder="${t("notePh")}"></label></div>
+   <div><button class="btn" onclick="addKE()">${t("save")}</button></div></section>
+  <section class="panel"><h2>${t("history")}</h2><div class="tbl"><table><tr><th>${t("date")}</th><th>${t("entry")}</th><th class="r">${t("gold")}</th><th class="r">Rs</th><th>${t("note")}</th></tr>
+   ${ents.map(e=>`<tr><td>${fmtD(e.date)}</td><td>${e.type=="issue"?`<span class="pill due">${t("issue")}</span>`:e.type=="receive"?`<span class="pill ok">${t("receive")}</span>`:`<span class="pill off">${t("payment")}</span>`}</td>
+    <td class="r num">${e.type=="issue"?"+"+g(e.wt)+" "+e.karat:e.type=="receive"?"−"+g(e.wt)+(e.wast?`<div class="muted small">${t("wastage")} ${g(e.wast)}</div>`:""):"—"}</td>
     <td class="r num">${e.type=="receive"?rs(e.maz||0):e.type=="pay"?"−"+rs(e.amt):"—"}</td><td class="small">${esc(e.note)}</td></tr>`).join("")}
   </table></div></section>`:""}`;
 }
 let kType="issue";
-function addK(){const n=$("#kName").value.trim();if(!n)return toast("Naam likhein");const id=Math.max(0,...S.karigars.map(k=>k.id))+1;S.karigars.push({id,name:n,phone:$("#kPhone").value});selK=id;save();Karigar()}
+function addK(){const n=$("#kName").value.trim();if(!n)return toast(t("enterName"));const id=Math.max(0,...S.karigars.map(k=>k.id))+1;S.karigars.push({id,name:n,phone:$("#kPhone").value});selK=id;save();Karigar()}
 function addKE(){const e={kid:selK,date:today(),type:kType,note:$("#keN").value};
-  if(kType=="issue"){e.wt=num("keWt");e.karat=$("#keK").value;if(!e.wt)return toast("Wazan likhein")}
-  if(kType=="receive"){e.wt=num("keWt");e.wast=num("keW");e.maz=num("keM");if(!e.wt)return toast("Wazan likhein")}
-  if(kType=="pay"){e.amt=num("keA");if(!e.amt)return toast("Raqam likhein")}
-  S.kentries.push(e);save();Karigar();toast("Save ho gaya")}
+  if(kType=="issue"){e.wt=num("keWt");e.karat=$("#keK").value;if(!e.wt)return toast(t("enterWeight"))}
+  if(kType=="receive"){e.wt=num("keWt");e.wast=num("keW");e.maz=num("keM");if(!e.wt)return toast(t("enterWeight"))}
+  if(kType=="pay"){e.amt=num("keA");if(!e.amt)return toast(t("enterAmount"))}
+  S.kentries.push(e);save();Karigar();toast(t("saved"))}
 
-/* ===== KHATA ===== */
+/* ===== CUSTOMER LEDGER (KHATA) ===== */
 let selC=null;
 function Khata(){
   const c=selC&&cust(selC);
-  $("#main").innerHTML=head("Customer Khata","Udhaar, advance aur wusooli")+`
-  <div class="g2"><section class="panel"><h2>Customers</h2><div class="tbl"><table><tr><th>Naam</th><th class="r">Balance</th></tr>
-   ${S.customers.map(x=>{const b=custBal(x.id);return `<tr style="cursor:pointer" onclick="selC=${x.id};Khata()"><td><b>${esc(x.name)}</b><div class="muted small">${esc(x.phone)}</div></td><td class="r num">${b>0?`<span class="pill due">Lena ${rs(b)}</span>`:b<0?`<span class="pill ok">Advance ${rs(-b)}</span>`:'<span class="pill off">Clear</span>'}</td></tr>`}).join("")}
+  $("#main").innerHTML=head(t("khataTitle"),t("khataSub"))+`
+  <div class="g2"><section class="panel"><h2>${t("customers")}</h2><div class="tbl"><table><tr><th>${t("name")}</th><th class="r">${t("balance")}</th></tr>
+   ${S.customers.map(x=>{const b=custBal(x.id);return `<tr style="cursor:pointer" onclick="selC=${x.id};Khata()"><td><b>${esc(x.name)}</b><div class="muted small">${esc(x.phone)}</div></td><td class="r num">${b>0?`<span class="pill due">${t("due",rs(b))}</span>`:b<0?`<span class="pill ok">${t("advance",rs(-b))}</span>`:`<span class="pill off">${t("clear")}</span>`}</td></tr>`}).join("")}
   </table></div>
-  <div class="fields"><label>Naya customer<input id="cName" placeholder="Naam"></label><label>Phone<input id="cPhone" placeholder="03xx"></label></div><div><button class="btn sm" onclick="addC()">+ Shamil</button></div></section>
-  <section class="panel">${c?`<h2>${esc(c.name)}</h2><div class="stat"><span>Balance</span><b class="num ${custBal(c.id)>0?"":"gold"}">${rs(custBal(c.id))}</b></div>
-   <div class="fields"><label>Raqam (Rs)<input id="lAmt" type="number"></label><label>Note<input id="lNote" placeholder="Wusooli / advance"></label></div>
-   <div class="row"><button class="btn sm" onclick="addL(-1)">Wusool kiya / Advance</button><button class="btn ghost sm" onclick="addL(1)">Udhaar diya</button></div>
-   <div class="tbl"><table><tr><th>Date</th><th>Note</th><th class="r">Rs</th></tr>${S.ledger.filter(l=>l.cid==c.id).slice().reverse().map(l=>`<tr><td>${fmtD(l.date)}</td><td>${esc(l.note)}</td><td class="r num" style="color:${l.amt>0?"var(--warn)":"var(--good)"}">${l.amt>0?"+":"−"}${rs(Math.abs(l.amt))}</td></tr>`).join("")}</table></div>`
-   :`<h2>Customer chunein</h2><p class="muted">Baen taraf list se kisi customer par tap karein, uska poora khata yahan dikhega.</p>`}</section></div>`;
+  <div class="fields"><label>${t("newCustomer")}<input id="cName" placeholder="${t("name")}"></label><label>${t("phone")}<input id="cPhone" placeholder="03xx"></label></div><div><button class="btn sm" onclick="addC()">${t("add")}</button></div></section>
+  <section class="panel">${c?`<h2>${esc(c.name)}</h2><div class="stat"><span>${t("balance")}</span><b class="num ${custBal(c.id)>0?"":"gold"}">${rs(custBal(c.id))}</b></div>
+   <div class="fields"><label>${t("amountRs")}<input id="lAmt" type="number"></label><label>${t("note")}<input id="lNote" placeholder="${t("collection")} / ${t("advance","").trim()}"></label></div>
+   <div class="row"><button class="btn sm" onclick="addL(-1)">${t("gotPayment")}</button><button class="btn ghost sm" onclick="addL(1)">${t("gaveCredit")}</button></div>
+   <div class="tbl"><table><tr><th>${t("date")}</th><th>${t("note")}</th><th class="r">Rs</th></tr>${S.ledger.filter(l=>l.cid==c.id).slice().reverse().map(l=>`<tr><td>${fmtD(l.date)}</td><td>${esc(l.note)}</td><td class="r num" style="color:${l.amt>0?"var(--warn)":"var(--good)"}">${l.amt>0?"+":"−"}${rs(Math.abs(l.amt))}</td></tr>`).join("")}</table></div>`
+   :`<h2>${t("selectCust")}</h2><p class="muted">${t("selectHint")}</p>`}</section></div>`;
 }
-function addC(){const n=$("#cName").value.trim();if(!n)return toast("Naam likhein");const id=Math.max(0,...S.customers.map(c=>c.id))+1;S.customers.push({id,name:n,phone:$("#cPhone").value});selC=id;save();Khata()}
-function addL(sign){const a=num("lAmt");if(!a)return toast("Raqam likhein");S.ledger.push({cid:selC,date:today(),amt:sign*a,note:$("#lNote").value||(sign<0?"Wusooli":"Udhaar")});save();Khata();toast("Save ho gaya")}
+function addC(){const n=$("#cName").value.trim();if(!n)return toast(t("enterName"));const id=Math.max(0,...S.customers.map(c=>c.id))+1;S.customers.push({id,name:n,phone:$("#cPhone").value});selC=id;save();Khata()}
+function addL(sign){const a=num("lAmt");if(!a)return toast(t("enterAmount"));S.ledger.push({cid:selC,date:today(),amt:sign*a,note:$("#lNote").value||(sign<0?"Collection":"Credit")});save();Khata();toast(t("saved"))}
 
 /* ===== REPORTS ===== */
 function Report(){
   const days=[...Array(7)].map((_,i)=>dayISO(6-i));
   const per=days.map(d=>S.bills.filter(b=>b.date==d).reduce((a,b)=>a+b.total,0)),max=Math.max(1,...per);
   const wk=S.bills.filter(b=>days.includes(b.date));
-  $("#main").innerHTML=head("Reports","Pichle 7 din")+`
+  $("#main").innerHTML=head(t("reports"),t("last7"))+`
   <section class="grid">
-   <div class="panel stat"><span>Kul sale</span><b class="num gold">${rs(wk.reduce((a,b)=>a+b.total,0))}</b></div>
-   <div class="panel stat"><span>Cash aaya</span><b class="num">${rs(wk.reduce((a,b)=>a+b.paid,0))}</b></div>
-   <div class="panel stat"><span>Sona bika</span><b class="num">${g(wk.reduce((a,b)=>a+(b.gold||0),0))}</b></div>
-   <div class="panel stat"><span>Bills</span><b class="num">${wk.length}</b></div></section>
-  <section class="panel"><h2>Roz ki sale</h2><div class="bars">${days.map((d,i)=>`<div class="bar" title="${rs(per[i])}"><small class="num">${per[i]?Math.round(per[i]/1000)+"k":""}</small><i style="height:${per[i]/max*100}%"></i><small>${fmtD(d)}</small></div>`).join("")}</div></section>
-  <section class="panel"><h2>Karigar ke paas sona</h2><div class="tbl"><table><tr><th>Karigar</th><th class="r">Sona baqi</th><th class="r">Mazdoori baqi</th></tr>${S.karigars.map(k=>{const b=kBal(k.id);return `<tr><td>${esc(k.name)}</td><td class="r num">${g(b.gold)}</td><td class="r num">${rs(b.cash)}</td></tr>`}).join("")}</table></div></section>`;
+   <div class="panel stat"><span>${t("totalSales")}</span><b class="num gold">${rs(wk.reduce((a,b)=>a+b.total,0))}</b></div>
+   <div class="panel stat"><span>${t("cashIn")}</span><b class="num">${rs(wk.reduce((a,b)=>a+b.paid,0))}</b></div>
+   <div class="panel stat"><span>${t("goldSold")}</span><b class="num">${g(wk.reduce((a,b)=>a+(b.gold||0),0))}</b></div>
+   <div class="panel stat"><span>${t("billsL")}</span><b class="num">${wk.length}</b></div></section>
+  <section class="panel"><h2>${t("dailySales")}</h2><div class="bars">${days.map((d,i)=>`<div class="bar" title="${rs(per[i])}"><small class="num">${per[i]?Math.round(per[i]/1000)+"k":""}</small><i style="height:${per[i]/max*100}%"></i><small>${fmtD(d)}</small></div>`).join("")}</div></section>
+  <section class="panel"><h2>${t("goldWithK")}</h2><div class="tbl"><table><tr><th>${t("karigar")}</th><th class="r">${t("goldBal")}</th><th class="r">${t("makingDue")}</th></tr>${S.karigars.map(k=>{const b=kBal(k.id);return `<tr><td>${esc(k.name)}</td><td class="r num">${g(b.gold)}</td><td class="r num">${rs(b.cash)}</td></tr>`}).join("")}</table></div></section>`;
 }
 
 /* ===== SETTINGS ===== */
 function Settings(){const st=S.settings;
-  $("#main").innerHTML=head("Settings","Har shop apni marzi se badal sakti hai")+`
-  <section class="panel"><h2>Dukaan</h2><div class="fields">
-   <label>Dukaan ka naam<input id="stShop" value="${esc(st.shop)}"></label><label>Phone<input id="stPhone" value="${esc(st.phone)}"></label>
-   <label>Pata<input id="stAddr" value="${esc(st.address)}"></label><label>PIN<input id="stPin" value="${esc(st.pin)}"></label></div></section>
-  <section class="panel"><h2>Aaj ka rate (per tola)</h2><div class="fields">${KARATS.map(k=>k=="24K"?`<label>24K (yahan likhein)<input id="r24K" type="number" value="${st.rates["24K"]}" oninput="autoRates()"></label>`:`<label>${k} (khud)<input id="r${k}" type="number" value="${rateOf(k)}" readonly tabindex="-1" style="opacity:.75"></label>`).join("")}</div>
-   <p class="muted small" style="margin:0">Sirf 24K ka rate likhein. Baqi karat ka rate khud hisaab ho jayega.</p></section>
-  <section class="panel"><h2>Hisaab ke qaide</h2><div class="fields">
-   <label>Default wastage %<input id="stW" type="number" step="0.1" value="${st.wastage}"></label>
-   <label>Mazdoori tareeqa<select id="stMT"><option value="gram" ${st.mazType=="gram"?"selected":""}>Per gram</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>Fixed per item</option></select></label>
-   <label>Mazdoori rate (Rs)<input id="stMR" type="number" value="${st.mazRate}"></label>
-   <label>Purane sone par kaat %<input id="stK" type="number" step="0.1" value="${st.kaat}"></label></div></section>
-  <div class="row"><button class="btn" onclick="saveSet()">Settings save karein</button><span class="spacer"></span>
-   <button class="btn ghost sm" onclick="resetAsk(this)">Demo data dobara bharein</button></div>`;
+  $("#main").innerHTML=head(t("settings"),t("settingsSub"))+`
+  <section class="panel"><h2>${t("shop")}</h2><div class="fields">
+   <label>${t("shopName")}<input id="stShop" value="${esc(st.shop)}"></label><label>${t("phone")}<input id="stPhone" value="${esc(st.phone)}"></label>
+   <label>${t("address")}<input id="stAddr" value="${esc(st.address)}"></label><label>${t("pin")}<input id="stPin" value="${esc(st.pin)}"></label></div></section>
+  <section class="panel"><h2>${t("rateTitle")}</h2><div class="fields">${KARATS.map(k=>k=="24K"?`<label>${t("r24")}<input id="r24K" type="number" value="${st.rates["24K"]}" oninput="autoRates()"></label>`:`<label>${k} ${t("auto")}<input id="r${k}" type="number" value="${rateOf(k)}" readonly tabindex="-1" style="opacity:.75"></label>`).join("")}</div>
+   <p class="muted small" style="margin:0">${t("rateNote")}</p></section>
+  <section class="panel"><h2>${t("rules")}</h2><div class="fields">
+   <label>${t("defWastage")}<input id="stW" type="number" step="0.1" value="${st.wastage}"></label>
+   <label>${t("makingMethod")}<select id="stMT"><option value="gram" ${st.mazType=="gram"?"selected":""}>${t("perGramOpt")}</option><option value="fixed" ${st.mazType=="fixed"?"selected":""}>${t("fixedItem")}</option></select></label>
+   <label>${t("makingRate")}<input id="stMR" type="number" value="${st.mazRate}"></label>
+   <label>${t("oldKaat")}<input id="stK" type="number" step="0.1" value="${st.kaat}"></label></div></section>
+  <div class="row"><button class="btn" onclick="saveSet()">${t("saveSettings")}</button><span class="spacer"></span>
+   <button class="btn ghost sm" onclick="resetAsk(this)">${t("resetDemo")}</button></div>`;
 }
 function autoRates(){const r=num("r24K");KARATS.forEach(k=>{if(k!="24K")$("#r"+k).value=Math.round(r*parseInt(k)/24)})}
 function saveSet(){const st=S.settings;st.shop=$("#stShop").value;st.phone=$("#stPhone").value;st.address=$("#stAddr").value;st.pin=$("#stPin").value||"1234";
-  st.rates["24K"]=num("r24K");st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");save();render();toast("Settings save ho gayin")}
-function resetAsk(b){if(b.dataset.c){S=demoData();cart=[];oldGold=null;save();render();toast("Demo data wapas aa gaya")}else{b.dataset.c=1;b.textContent="Pakka? Dobara dabayein";b.classList.add("danger")}}
+  st.rates["24K"]=num("r24K");st.wastage=num("stW");st.mazType=$("#stMT").value;st.mazRate=num("stMR");st.kaat=num("stK");save();render();toast(t("settingsSaved"))}
+function resetAsk(b){if(b.dataset.c){S=demoData();cart=[];oldGold=null;save();render();toast(t("demoRestored"))}else{b.dataset.c=1;b.textContent=t("sure");b.classList.add("danger")}}
 
 render();
 </script>
