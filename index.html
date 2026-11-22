@@ -143,6 +143,9 @@ td.r,th.r{text-align:end}
 .cb-t b{font-size:.92rem;color:#2b1d12;overflow-wrap:anywhere;line-height:1.3}
 .cb-rate{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 12px 12px;padding:8px 12px;border-radius:10px;background:#6b2a4a;color:#fff}
 .cb-rl{font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.cb-rate b{font-size:1.1rem;white-space:nowrap}
+.payrow{display:grid;grid-template-columns:1fr 2fr;gap:10px;align-items:start}
+.payrow input{min-width:0}
+.linkbtn{align-self:flex-start;background:none;border:0;padding:2px 0;color:var(--accent);font-weight:600;font-size:.78rem;cursor:pointer}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
 html[dir="rtl"] .num{unicode-bidi:plaintext}
@@ -402,7 +405,7 @@ function Bill(){
      <label>${t("testKarat")}<select id="oKarat" oninput="setOld()">${KARATS.map(k=>`<option ${(oldGold?.karat||DEFAULT_KARAT)==k?"selected":""}>${k}</option>`).join("")}</select></label>
      <label>${t("deduction")}<input id="oKaat" type="number" step="0.1" value="${oldGold?.kaat??st.kaat}" oninput="setOld()"></label>
     </div></details>
-   <div class="fields"><label>${t("discountRs")}<input id="bDisc" type="number" value="0" oninput="totals()"></label><label>${t("receivedRs")} *<span class="row" style="flex-wrap:nowrap"><input id="bPaid" type="number" placeholder="${t("enterReceived")}" oninput="totals()" style="border-color:var(--accent)"><button type="button" class="btn ghost sm" style="flex-shrink:0" onclick="$('#bPaid').value=Math.round(billTotals().total);totals()">${t("fullPay")}</button></span></label></div>
+   <div class="payrow"><label>${t("discountRs")}<input id="bDisc" type="number" value="0" oninput="totals()"></label><label>${t("receivedRs")} *<input id="bPaid" type="number" placeholder="${t("enterReceived")}" oninput="totals()" style="border-color:var(--accent);font-weight:600"><button type="button" class="linkbtn" onclick="$('#bPaid').value=Math.round(billTotals().total);totals()">✓ ${t("fullPay")}</button></label></div>
    <div class="calc num" id="totBox"></div>
    <button class="btn" onclick="saveBill()">${t("saveBill")}</button>
   </section></div>`;
