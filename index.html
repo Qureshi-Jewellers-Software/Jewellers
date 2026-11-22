@@ -357,7 +357,7 @@ function Bill(){
     ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross} gm</option>`).join("")}</select></label>
    <div class="fields">
     <label>${t("itemName")}<input id="bName" placeholder="e.g. Ring"></label>
-    <label>${t("karat")}<select id="bKarat" oninput="live()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
+    <label>${t("karat")} <small id="bKLock" class="muted" hidden>🔒</small><select id="bKarat" onchange="lockKarat()" oninput="live()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
     <label>${t("gross")}<input id="bGross" type="number" step="0.01" oninput="live()"></label>
     <label>${t("stoneWt")}<input id="bNag" type="number" step="0.01" value="0" oninput="live()"></label>
     <label>${t("wastagePct")}<input id="bWast" type="number" step="0.1" value="${st.wastage}" oninput="live()"></label>
@@ -388,7 +388,10 @@ function Bill(){
 }
 function fillCust(){const c=cust(+$("#bCust").value);$("#bCName").value=c?c.name:"";$("#bCPhone").value=c?c.phone||"":""}
 function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Jewellery",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
-function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s)return;$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bGross").value=s.gross;$("#bNag").value=s.nag;const x=stockItem(s);$("#bWast").value=x.wastage;$("#bMazType").value=x.mazType;$("#bMaz").value=x.mazRate;live()}
+/* Karat is locked once chosen; pick "Enter manually" to start the item again */
+function lockKarat(){$("#bKarat").disabled=true;$("#bKLock").hidden=false;live()}
+function unlockKarat(){$("#bKarat").disabled=false;$("#bKLock").hidden=true}
+function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s){unlockKarat();$("#bKarat").value=DEFAULT_KARAT;live();return}$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bKarat").disabled=true;$("#bKLock").hidden=false;$("#bGross").value=s.gross;$("#bNag").value=s.nag;const x=stockItem(s);$("#bWast").value=x.wastage;$("#bMazType").value=x.mazType;$("#bMaz").value=x.mazRate;live()}
 /* Full weight breakdown (used in Stock > Add New Item) */
 function calcHTML(it,c){return `
  <div style="font-weight:700"><span>${t("calcTitle")}</span><span></span></div>
