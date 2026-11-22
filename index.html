@@ -133,16 +133,16 @@ td.r,th.r{text-align:end}
 .pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
 .legend{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:var(--muted)}.sw{display:inline-block;width:12px;height:10px;border-radius:3px}.sw.in{background:var(--chart)}.sw.sold{background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);border:1px solid var(--line);margin-inline-start:6px}
 @media (max-width:560px){.srow{grid-template-columns:72px 1fr auto}.srow .sval{display:none}}
-.custbox{border-radius:12px;overflow:hidden;margin:6px 0 12px;border:1px solid #c9a24a;background:linear-gradient(135deg,#fff8e6,#fdeccd);-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.cb-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 12px;background:linear-gradient(90deg,#6b2a4a,#8e3b62);color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase}
+.custbox{border-radius:12px;overflow:hidden;margin:6px 0 12px;border:1px solid #c7d7e8;background:#f2f7fc;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cb-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 12px;background:#1f4e79;color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase}
 .cb-head .ur{font-size:.85rem;letter-spacing:0;line-height:1.6}
 .cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;padding:10px 12px}
 .cb{display:flex;align-items:center;gap:8px;min-width:0}
-.cb-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid #e3c98a;display:grid;place-items:center;font-size:.9rem}
-.cb-t{display:flex;flex-direction:column;min-width:0}.cb-t small{font-size:.64rem;color:#8a6d3b;white-space:nowrap}.cb-t .ur{font-size:.72rem;line-height:1.5}
-.cb-t b{font-size:.92rem;color:#2b1d12;overflow-wrap:anywhere;line-height:1.3}
+.cb-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid #c7d7e8;display:grid;place-items:center;font-size:.9rem}
+.cb-t{display:flex;flex-direction:column;min-width:0}.cb-t small{font-size:.64rem;color:#4f6b86;white-space:nowrap}.cb-t .ur{font-size:.72rem;line-height:1.5}
+.cb-t b{font-size:.92rem;color:#14283d;overflow-wrap:anywhere;line-height:1.3}
 .cb-rate{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 12px 12px;padding:8px 12px;border-radius:10px;background:#a8781c;color:#fff}
-.cb-rate small{display:block;font-size:.66rem;opacity:.9}.cb-rate .ur{font-size:.8rem;line-height:1.5}.cb-rate b{font-size:1.15rem;white-space:nowrap}
+.cb-rl{font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.cb-rate b{font-size:1.1rem;white-space:nowrap}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
 html[dir="rtl"] .num{unicode-bidi:plaintext}
@@ -488,11 +488,11 @@ function showReceipt(b,dup){
      ${CB("🧾","بل نمبر","Bill No",`<span class="num">#${b.no}</span>`)}
      ${CB("📅","تاریخ","Date",fmtD(b.date))}
     </div>
-    <div class="cb-rate"><div><small>Today's Gold Rate · 24K (per tola)</small><span class="ur">آج کا ریٹ</span></div><b class="num">${rs((b.rates||{})["24K"]||rateOf("24K"))}</b></div>
+    <div class="cb-rate"><span class="cb-rl">Today Gold 24K (Per Tola)</span><b class="num">${rs((b.rates||{})["24K"]||rateOf("24K"))}</b></div>
    </div>
    ${(b.items||[]).map(it=>`<div style="margin-top:8px;font-weight:600;font-size:.85rem">${esc(it.name)} · ${it.karat}</div>
-     ${L("خالص وزن","Net weight",g(it.calc.net))}${L("چھیجت","Wastage "+(it.wastage||0)+"%",g(it.calc.wast))}${L("ٹوٹل وزن","Total weight",g(it.calc.goldWt))}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
-   ${b.old?L("پرانا سونا","Old gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
+     ${L("خالص وزن","Net Weight",g(it.calc.net))}${L("چھیجت","Wastage "+(it.wastage||0)+"%",g(it.calc.wast))}${L("ٹوٹل وزن","Total Weight",g(it.calc.goldWt))}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
+   ${b.old?L("پرانا سونا","Old Gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
    ${L("کل رقم","Total",rs(b.total),"big")}${L("وصول","Received",rs(b.paid))}${L("باقی","Balance",rs(Math.max(0,b.total-b.paid)),"big")}
    <div class="ur" style="text-align:center;margin-top:8px">خریداری کا شکریہ</div><div style="text-align:center;font-size:.75rem;color:#7a6f5a">Thank you for your purchase</div></div>
   <p class="muted small" style="margin:0">${t("printTip")}</p></div>`;
