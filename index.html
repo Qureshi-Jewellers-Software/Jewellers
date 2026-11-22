@@ -140,6 +140,16 @@ html[lang="ur"] .stat span,html[lang="ur"] th{text-transform:none;letter-spacing
 html[lang="ur"] .num,html[lang="ur"] input[type="number"]{font-family:var(--font-body)}
 html[lang="ur"] .lang{font-family:var(--font-body)}
 .lang-ur{font-family:var(--font-urdu)}
+.dupmark{text-align:center;font-weight:800;letter-spacing:.08em;font-size:.78rem;color:#9a2f2f;border:1.5px dashed #9a2f2f;border-radius:6px;padding:3px 6px;margin-bottom:8px}
+@media print{
+  body>*:not(.overlay){display:none!important}
+  .overlay{position:static;background:none;padding:0;overflow:visible}
+  .overlay:not(:last-of-type){display:none!important}
+  .modal{max-width:none;padding:0;box-shadow:none;background:#fff}
+  .modal>*:not(.receipt){display:none!important}
+  .receipt{border:none;padding:0;background:#fff}
+  .toast{display:none!important}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -175,7 +185,7 @@ const TX={
  oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (gm)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
- itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], custName:["Customer Name","گاہک کا نام"], custMobile:["Mobile No","موبائل نمبر"], totalWastage:["Total wastage","کل چھیجت"], backupTitle:["Backup","بیک اپ"], backupNote:["Download a copy of all your data (stock, bills, artisans, ledger, settings) to keep safe. Use Restore to load it back on any device.","اپنا سارا ڈیٹا (اسٹاک، بل، کاریگر، کھاتہ، سیٹنگز) فائل میں محفوظ کریں۔ بحال کر کے کسی بھی ڈیوائس پر دوبارہ لوڈ کر سکتے ہیں۔"], backupDl:["Download backup","بیک اپ ڈاؤن لوڈ کریں"], backupRestore:["Restore from backup","بیک اپ سے بحال کریں"], lastBackup:["Last backup: {0}","آخری بیک اپ: {0}"], noBackup:["No backup taken yet","ابھی تک کوئی بیک اپ نہیں لیا"], backupDone:["Backup downloaded","بیک اپ ڈاؤن لوڈ ہو گیا"], badFile:["This file is not a valid backup","یہ درست بیک اپ فائل نہیں"], restoreAsk:["Restore {0}? Current data will be replaced.","{0} بحال کریں؟ موجودہ ڈیٹا بدل جائے گا۔"], restoreYes:["Yes, restore","ہاں، بحال کریں"], restored:["Backup restored","بیک اپ بحال ہو گیا"], stockLevel:["Stock Level by Category","قسم کے لحاظ سے اسٹاک"], legIn:["In stock","اسٹاک میں"], legSold:["Sold","فروخت شدہ"], lvOut:["Out of stock","ختم"], lvLow:["Low — reorder","کم — خریداری کریں"], lvOk:["Enough stock","کافی اسٹاک"], lvNote:["Low = {0} items or fewer left (change in Settings). Bar length = weight in grams.","کم = {0} یا اس سے کم آئٹم باقی (سیٹنگز میں تبدیل کریں)۔ پٹی کی لمبائی = وزن (گرام)۔"], lowLimitL:["Low stock alert (items)","کم اسٹاک الرٹ (آئٹمز)"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
+ itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], print:["Print","پرنٹ"], printTip:["Print opens your printer or Save as PDF option.","پرنٹ دبانے پر پرنٹر یا PDF محفوظ کرنے کا آپشن کھلے گا۔"], allBills:["All Bills","تمام بل"], billsSub:["Open any old bill to view or print a duplicate copy","کوئی بھی پرانا بل کھولیں، دیکھیں یا ڈپلیکیٹ پرنٹ کریں"], billSearch:["Search: bill no, name or mobile","تلاش: بل نمبر، نام یا موبائل"], viewPrint:["View / Print","دیکھیں / پرنٹ"], noBills:["No bills found","کوئی بل نہیں ملا"], mobile:["Mobile","موبائل"], custName:["Customer Name","گاہک کا نام"], custMobile:["Mobile No","موبائل نمبر"], totalWastage:["Total wastage","کل چھیجت"], backupTitle:["Backup","بیک اپ"], backupNote:["Download a copy of all your data (stock, bills, artisans, ledger, settings) to keep safe. Use Restore to load it back on any device.","اپنا سارا ڈیٹا (اسٹاک، بل، کاریگر، کھاتہ، سیٹنگز) فائل میں محفوظ کریں۔ بحال کر کے کسی بھی ڈیوائس پر دوبارہ لوڈ کر سکتے ہیں۔"], backupDl:["Download backup","بیک اپ ڈاؤن لوڈ کریں"], backupRestore:["Restore from backup","بیک اپ سے بحال کریں"], lastBackup:["Last backup: {0}","آخری بیک اپ: {0}"], noBackup:["No backup taken yet","ابھی تک کوئی بیک اپ نہیں لیا"], backupDone:["Backup downloaded","بیک اپ ڈاؤن لوڈ ہو گیا"], badFile:["This file is not a valid backup","یہ درست بیک اپ فائل نہیں"], restoreAsk:["Restore {0}? Current data will be replaced.","{0} بحال کریں؟ موجودہ ڈیٹا بدل جائے گا۔"], restoreYes:["Yes, restore","ہاں، بحال کریں"], restored:["Backup restored","بیک اپ بحال ہو گیا"], stockLevel:["Stock Level by Category","قسم کے لحاظ سے اسٹاک"], legIn:["In stock","اسٹاک میں"], legSold:["Sold","فروخت شدہ"], lvOut:["Out of stock","ختم"], lvLow:["Low — reorder","کم — خریداری کریں"], lvOk:["Enough stock","کافی اسٹاک"], lvNote:["Low = {0} items or fewer left (change in Settings). Bar length = weight in grams.","کم = {0} یا اس سے کم آئٹم باقی (سیٹنگز میں تبدیل کریں)۔ پٹی کی لمبائی = وزن (گرام)۔"], lowLimitL:["Low stock alert (items)","کم اسٹاک الرٹ (آئٹمز)"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
  wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
  makingPerGram:["Making ({0} × {1}/gm)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (total)","مزدوری (ٹوٹل)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
@@ -311,9 +321,9 @@ function render(){
   }
   $("#root").innerHTML=`<div class="app"><nav class="rail">
     <div class="brand"><b>${esc(S.settings.shop)}</b><small>${t("brandSub")}</small></div>
-    ${NAV.map(([k,l])=>`<button class="nav ${screen==k?"on":""}" onclick="go('${k}')">${icon(k)}<span>${t(l)}</span></button>`).join("")}
+    ${NAV.map(([k,l])=>`<button class="nav ${screen==k||(k=="bill"&&screen=="bills")?"on":""}" onclick="go('${k}')">${icon(k)}<span>${t(l)}</span></button>`).join("")}
   </nav><main><div class="wrap" id="main"></div></main></div>`;
-  ({home:Home,bill:Bill,stock:Stock,karigar:Karigar,khata:Khata,report:Report,settings:Settings})[screen]();
+  ({home:Home,bill:Bill,bills:Bills,stock:Stock,karigar:Karigar,khata:Khata,report:Report,settings:Settings})[screen]();
 }
 function go(k){screen=k;render();window.scrollTo(0,0)}
 function doLogin(){if($("#pin").value===S.settings.pin){loggedIn=true;render()}else toast(t("wrongPin"))}
@@ -337,8 +347,8 @@ function Home(){
    <button class="panel stat" style="text-align:start;cursor:pointer" onclick="stockPreview()"><span>${t("inStock")}</span><b class="num">${g(stockWt)}</b><small class="muted">${inStock.length} ${t("items")} · ${tmr(stockWt)}</small><small style="color:var(--accent);font-weight:600">${t("viewStock")}</small></button>
    <div class="panel stat"><span>${t("receivables")}</span><b class="num" style="color:var(--warn)">${rs(udhaar)}</b></div>
   </section>
-  <section class="panel"><h2>${t("recentBills")}</h2><div class="tbl"><table><tr><th>${t("bill")}</th><th>${t("date")}</th><th>${t("customer")}</th><th class="r">${t("total")}</th><th class="r">${t("balance")}</th></tr>
-   ${S.bills.slice(-6).reverse().map(b=>`<tr><td>#${b.no}</td><td>${fmtD(b.date)}</td><td>${esc(cust(b.cid)?.name||t("walkin"))}</td><td class="r num">${rs(b.total)}</td><td class="r num">${b.total-b.paid>0?`<span class="pill due">${rs(b.total-b.paid)}</span>`:`<span class="pill ok">${t("paid")}</span>`}</td></tr>`).join("")}
+  <section class="panel"><div class="row"><h2>${t("recentBills")}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="go('bills')">${t("allBills")}</button></div><div class="tbl"><table><tr><th>${t("bill")}</th><th>${t("date")}</th><th>${t("customer")}</th><th class="r">${t("total")}</th><th class="r">${t("balance")}</th></tr>
+   ${S.bills.slice(-6).reverse().map(b=>`<tr style="cursor:pointer" onclick="openBill(${b.no})"><td>#${b.no}</td><td>${fmtD(b.date)}</td><td>${esc(cust(b.cid)?.name||t("walkin"))}</td><td class="r num">${rs(b.total)}</td><td class="r num">${b.total-b.paid>0?`<span class="pill due">${rs(b.total-b.paid)}</span>`:`<span class="pill ok">${t("paid")}</span>`}</td></tr>`).join("")}
   </table></div></section>`;
 }
 
@@ -357,7 +367,7 @@ function Bill(){
     ${S.stock.filter(s=>!s.sold&&!cart.some(c=>c.tag==s.tag)).map(s=>`<option value="${s.tag}">${s.tag} · ${esc(s.name)} · ${s.gross} gm</option>`).join("")}</select></label>
    <div class="fields">
     <label>${t("itemName")}<input id="bName" placeholder="e.g. Ring"></label>
-    <label>${t("karat")} <small id="bKLock" class="muted" hidden>🔒</small><select id="bKarat" onchange="lockKarat()" oninput="live()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
+    <label>${t("karat")}<select id="bKarat" onchange="lockKarat()" oninput="live()">${KARATS.map(k=>`<option ${k==DEFAULT_KARAT?"selected":""}>${k}</option>`).join("")}</select></label>
     <label>${t("gross")}<input id="bGross" type="number" step="0.01" oninput="live()"></label>
     <label>${t("stoneWt")}<input id="bNag" type="number" step="0.01" value="0" oninput="live()"></label>
     <label>${t("wastagePct")}<input id="bWast" type="number" step="0.1" value="${st.wastage}" oninput="live()"></label>
@@ -389,9 +399,9 @@ function Bill(){
 function fillCust(){const c=cust(+$("#bCust").value);$("#bCName").value=c?c.name:"";$("#bCPhone").value=c?c.phone||"":""}
 function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Jewellery",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
 /* Karat is locked once chosen; pick "Enter manually" to start the item again */
-function lockKarat(){$("#bKarat").disabled=true;$("#bKLock").hidden=false;live()}
-function unlockKarat(){$("#bKarat").disabled=false;$("#bKLock").hidden=true}
-function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s){unlockKarat();$("#bKarat").value=DEFAULT_KARAT;live();return}$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bKarat").disabled=true;$("#bKLock").hidden=false;$("#bGross").value=s.gross;$("#bNag").value=s.nag;const x=stockItem(s);$("#bWast").value=x.wastage;$("#bMazType").value=x.mazType;$("#bMaz").value=x.mazRate;live()}
+function lockKarat(){$("#bKarat").disabled=true;live()}
+function unlockKarat(){$("#bKarat").disabled=false}
+function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s){unlockKarat();$("#bKarat").value=DEFAULT_KARAT;live();return}$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bKarat").disabled=true;$("#bGross").value=s.gross;$("#bNag").value=s.nag;const x=stockItem(s);$("#bWast").value=x.wastage;$("#bMazType").value=x.mazType;$("#bMaz").value=x.mazRate;live()}
 /* Full weight breakdown (used in Stock > Add New Item) */
 function calcHTML(it,c){return `
  <div style="font-weight:700"><span>${t("calcTitle")}</span><span></span></div>
@@ -436,14 +446,26 @@ function saveBill(){
   cart=[];oldGold=null;save();Bill();showReceipt(bill);
 }
 
+/* ===== ALL BILLS ===== */
+function billCust(b){const c=cust(b.cid);return {name:b.custName||c?.name||t("walkin"),phone:b.custPhone||c?.phone||""}}
+function Bills(){
+  $("#main").innerHTML=head(t("allBills"),t("billsSub"),`<button class="btn" onclick="go('bill')">+ ${t("newBill")}</button>`)+`
+  <section class="panel"><input id="bsq" type="search" placeholder="${t("billSearch")}" oninput="billRows()">
+  <div class="tbl"><table><thead><tr><th>${t("bill")}</th><th>${t("date")}</th><th>${t("customer")}</th><th>${t("mobile")}</th><th class="r">${t("total")}</th><th class="r">${t("balance")}</th><th></th></tr></thead><tbody id="billRows"></tbody></table></div></section>`;
+  billRows()}
+function billRows(){const q=($("#bsq").value||"").trim().toLowerCase();
+  const list=S.bills.slice().reverse().filter(b=>{const c=billCust(b);return !q||[String(b.no),c.name,c.phone].join(" ").toLowerCase().includes(q)});
+  $("#billRows").innerHTML=list.length?list.map(b=>{const c=billCust(b),bal=b.total-b.paid;return `<tr><td><b>#${b.no}</b></td><td>${fmtD(b.date)}</td><td>${esc(c.name)}</td><td class="num">${esc(c.phone||"—")}</td><td class="r num">${rs(b.total)}</td><td class="r num">${bal>0?`<span class="pill due">${rs(bal)}</span>`:`<span class="pill ok">${t("paid")}</span>`}</td><td><button class="btn ghost sm" onclick="openBill(${b.no})">${t("viewPrint")}</button></td></tr>`}).join(""):`<tr><td colspan="7" class="muted">${t("noBills")}</td></tr>`}
+
 /* ===== RECEIPT (Urdu + English on every bill) ===== */
-function showReceipt(b){
+function openBill(no){const b=S.bills.find(x=>x.no==no);if(b)showReceipt(b,true)}
+function showReceipt(b,dup){
   const st=S.settings,c=cust(b.cid);
   const CB=(ur,en,v)=>`<div class="cb"><small><span class="ur">${ur}</span> ${en}</small><b>${v}</b></div>`;
   const L=(ur,en,v,cls="")=>`<div class="line ${cls}"><span><span class="ur">${ur}</span> <small style="color:#7a6f5a">${en}</small></span><span class="num">${v}</span></div>`;
   const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
-  ov.innerHTML=`<div class="modal"><div class="row"><h2>${t("bill")} #${b.no}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">${t("close")}</button></div>
-  <div class="receipt"><h3 style="font-size:1.25rem;margin:0">${esc(st.shop)}</h3>
+  ov.innerHTML=`<div class="modal"><div class="row"><h2>${t("bill")} #${b.no}</h2><span class="spacer"></span><button class="btn sm" onclick="window.print()">🖨 ${t("print")}</button><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">${t("close")}</button></div>
+  <div class="receipt">${dup?`<div class="dupmark">DUPLICATE COPY · <span class="ur">ڈپلیکیٹ کاپی</span></div>`:""}<h3 style="font-size:1.25rem;margin:0">${esc(st.shop)}</h3>
    ${st.owner||st.phone?`<div style="text-align:center;font-weight:600;font-size:.85rem;margin-top:4px">${st.owner?esc(st.owner):""}${st.owner&&st.phone?" · ":""}${st.phone?`<span class="num">📞 ${esc(st.phone)}</span>`:""}</div>`:""}
    ${st.address?`<div style="text-align:center;font-size:.75rem;color:#7a6f5a">${esc(st.address)}</div>`:""}
    <div class="ur" style="text-align:center;font-size:1.1rem;margin:6px 0">رسید</div>
@@ -460,7 +482,7 @@ function showReceipt(b){
    ${b.old?L("پرانا سونا","Old gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
    ${L("کل رقم","Total",rs(b.total),"big")}${L("وصول","Received",rs(b.paid))}${L("باقی","Balance",rs(Math.max(0,b.total-b.paid)),"big")}
    <div class="ur" style="text-align:center;margin-top:8px">خریداری کا شکریہ</div><div style="text-align:center;font-size:.75rem;color:#7a6f5a">Thank you for your purchase</div></div>
-  <p class="muted small" style="margin:0">${t("printNote")}</p></div>`;
+  <p class="muted small" style="margin:0">${t("printTip")}</p></div>`;
   document.body.appendChild(ov);
 }
 
