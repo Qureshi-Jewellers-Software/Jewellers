@@ -129,6 +129,9 @@ td.r,th.r{text-align:end}
 .pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
 .legend{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:var(--muted)}.sw{display:inline-block;width:12px;height:10px;border-radius:3px}.sw.in{background:var(--chart)}.sw.sold{background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);border:1px solid var(--line);margin-inline-start:6px}
 @media (max-width:560px){.srow{grid-template-columns:72px 1fr auto}.srow .sval{display:none}}
+.custbox{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;border:1px solid #d8c79f;background:#fbf3e1;border-radius:8px;padding:10px 12px;margin:4px 0 10px}
+.custbox .cb{display:flex;flex-direction:column;min-width:0}.custbox small{font-size:.68rem;color:#7a6f5a}.custbox .ur{font-size:.8rem}.custbox b{font-size:.92rem;overflow-wrap:anywhere}
+.custbox .cb-rate{grid-column:1/-1;display:flex;flex-direction:column;border-top:1px dashed #d8c79f;padding-top:6px}.custbox .cb-rate small{font-size:.68rem;color:#7a6f5a}.custbox .cb-rate .num{font-weight:700;font-size:.88rem}
 .lang{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer}
 html[lang="ur"] body,html[lang="ur"] h1,html[lang="ur"] h2,html[lang="ur"] h3{font-family:var(--font-urdu)}
 html[dir="rtl"] .num{unicode-bidi:plaintext}
@@ -172,7 +175,7 @@ const TX={
  oldGold:["Old gold (exchange)","پرانا سونا (تبادلہ)"], weightG:["Weight (gm)","وزن (گرام)"], testKarat:["Tested karat","ٹیسٹ شدہ قیراط"], deduction:["Deduction %","کٹوتی %"],
  discountRs:["Discount (Rs)","رعایت (روپے)"], receivedRs:["Amount received (Rs)","وصول رقم (روپے)"], saveBill:["Save bill","بل محفوظ کریں"],
  netWt:["Net weight","خالص وزن"], wastage:["Wastage","چھیجت"], goldWt:["Gold weight","سونے کا وزن"], gold:["Gold","سونا"], makingL:["Making","مزدوری"], stone:["Stone","نگ"],
- itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], totalWastage:["Total wastage","کل چھیجت"], backupTitle:["Backup","بیک اپ"], backupNote:["Download a copy of all your data (stock, bills, artisans, ledger, settings) to keep safe. Use Restore to load it back on any device.","اپنا سارا ڈیٹا (اسٹاک، بل، کاریگر، کھاتہ، سیٹنگز) فائل میں محفوظ کریں۔ بحال کر کے کسی بھی ڈیوائس پر دوبارہ لوڈ کر سکتے ہیں۔"], backupDl:["Download backup","بیک اپ ڈاؤن لوڈ کریں"], backupRestore:["Restore from backup","بیک اپ سے بحال کریں"], lastBackup:["Last backup: {0}","آخری بیک اپ: {0}"], noBackup:["No backup taken yet","ابھی تک کوئی بیک اپ نہیں لیا"], backupDone:["Backup downloaded","بیک اپ ڈاؤن لوڈ ہو گیا"], badFile:["This file is not a valid backup","یہ درست بیک اپ فائل نہیں"], restoreAsk:["Restore {0}? Current data will be replaced.","{0} بحال کریں؟ موجودہ ڈیٹا بدل جائے گا۔"], restoreYes:["Yes, restore","ہاں، بحال کریں"], restored:["Backup restored","بیک اپ بحال ہو گیا"], stockLevel:["Stock Level by Category","قسم کے لحاظ سے اسٹاک"], legIn:["In stock","اسٹاک میں"], legSold:["Sold","فروخت شدہ"], lvOut:["Out of stock","ختم"], lvLow:["Low — reorder","کم — خریداری کریں"], lvOk:["Enough stock","کافی اسٹاک"], lvNote:["Low = {0} items or fewer left (change in Settings). Bar length = weight in grams.","کم = {0} یا اس سے کم آئٹم باقی (سیٹنگز میں تبدیل کریں)۔ پٹی کی لمبائی = وزن (گرام)۔"], lowLimitL:["Low stock alert (items)","کم اسٹاک الرٹ (آئٹمز)"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
+ itemTotal:["Item total","آئٹم کل"], addNewItem:["+ Add New Item","+ نیا زیور شامل کریں"], cancel:["Cancel","منسوخ"], custName:["Customer Name","گاہک کا نام"], custMobile:["Mobile No","موبائل نمبر"], totalWastage:["Total wastage","کل چھیجت"], backupTitle:["Backup","بیک اپ"], backupNote:["Download a copy of all your data (stock, bills, artisans, ledger, settings) to keep safe. Use Restore to load it back on any device.","اپنا سارا ڈیٹا (اسٹاک، بل، کاریگر، کھاتہ، سیٹنگز) فائل میں محفوظ کریں۔ بحال کر کے کسی بھی ڈیوائس پر دوبارہ لوڈ کر سکتے ہیں۔"], backupDl:["Download backup","بیک اپ ڈاؤن لوڈ کریں"], backupRestore:["Restore from backup","بیک اپ سے بحال کریں"], lastBackup:["Last backup: {0}","آخری بیک اپ: {0}"], noBackup:["No backup taken yet","ابھی تک کوئی بیک اپ نہیں لیا"], backupDone:["Backup downloaded","بیک اپ ڈاؤن لوڈ ہو گیا"], badFile:["This file is not a valid backup","یہ درست بیک اپ فائل نہیں"], restoreAsk:["Restore {0}? Current data will be replaced.","{0} بحال کریں؟ موجودہ ڈیٹا بدل جائے گا۔"], restoreYes:["Yes, restore","ہاں، بحال کریں"], restored:["Backup restored","بیک اپ بحال ہو گیا"], stockLevel:["Stock Level by Category","قسم کے لحاظ سے اسٹاک"], legIn:["In stock","اسٹاک میں"], legSold:["Sold","فروخت شدہ"], lvOut:["Out of stock","ختم"], lvLow:["Low — reorder","کم — خریداری کریں"], lvOk:["Enough stock","کافی اسٹاک"], lvNote:["Low = {0} items or fewer left (change in Settings). Bar length = weight in grams.","کم = {0} یا اس سے کم آئٹم باقی (سیٹنگز میں تبدیل کریں)۔ پٹی کی لمبائی = وزن (گرام)۔"], lowLimitL:["Low stock alert (items)","کم اسٹاک الرٹ (آئٹمز)"], searchPh:["Search: ring, chain, R001…","تلاش کریں: انگوٹھی، چین، R001…"], allCats:["All categories","تمام اقسام"], noMatch:["No matching items","کوئی آئٹم نہیں ملا"], autoTag:["(auto)","(خودکار)"], newCatPh:["New category name","نئی قسم کا نام"], addCat:["Add category","قسم شامل کریں"], catAdded:["Category added","قسم شامل ہو گئی"], catExists:["This category already exists","یہ قسم پہلے سے موجود ہے"], makingCol:["Making","مزدوری"], calcTitle:["Weight & Price Calculation","وزن اور قیمت کا حساب"], grossL:["Gross weight","کل وزن"], lessStone:["Less stone weight","نگ کا وزن منہا"],
  wastageOf:["Wastage {0}%","چھیجت {0}%"], totalWt:["Total weight (net + wastage)","ٹوٹل وزن (خالص + چھیجت)"], goldValue:["Gold value","سونے کی قیمت"],
  makingPerGram:["Making ({0} × {1}/gm)","مزدوری ({0} × {1} فی گرام)"], makingFixed:["Making (total)","مزدوری (ٹوٹل)"], wastShort:["wastage","چھیجت"], netShort:["net","خالص"], itemsL:["Items","آئٹمز"], lessOld:["Less old gold","پرانا سونا منہا"], discount:["Discount","رعایت"],
  grandTotal:["Grand total","کل رقم"], received:["Received","وصول"], balLedger:["Balance (to ledger)","بقایا (کھاتے میں)"],
@@ -366,7 +369,8 @@ function Bill(){
    <button class="btn" onclick="addItem()">${t("addToBill")}</button>
   </section>
   <section class="panel"><h2>${t("bill")}</h2>
-   <label>${t("customer")}<select id="bCust"><option value="0">${t("walkinCust")}</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></label>
+   <label>${t("customer")}<select id="bCust" onchange="fillCust()"><option value="0">${t("walkinCust")}</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></label>
+   <div class="fields"><label>${t("custName")}<input id="bCName" placeholder="${t("custName")}"></label><label>${t("custMobile")}<input id="bCPhone" type="tel" placeholder="03xx-xxxxxxx"></label></div>
    <div class="tbl"><table><tr><th>${t("item")}</th><th>${t("weight")}</th><th class="r">Rs</th><th></th></tr>
     ${cart.length?cart.map((it,i)=>{const c=itemCalc(it);return `<tr><td>${esc(it.name)}<div class="muted small">${it.karat}${it.tag?" · "+it.tag:""}</div></td><td class="num small"><b>${g(c.goldWt)}</b><div class="muted">${t("netShort")} ${g(c.net)} + ${t("wastShort")} ${g(c.wast)}</div><div class="muted">${tmr(c.goldWt)}</div></td><td class="r num">${rs(c.total)}</td><td><button class="btn ghost sm" onclick="cart.splice(${i},1);Bill()">✕</button></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">${t("noItems")}</td></tr>`}
    </table></div>
@@ -382,6 +386,7 @@ function Bill(){
   </section></div>`;
   live();totals();
 }
+function fillCust(){const c=cust(+$("#bCust").value);$("#bCName").value=c?c.name:"";$("#bCPhone").value=c?c.phone||"":""}
 function readItem(){return {tag:$("#bTag").value,name:$("#bName").value||"Jewellery",karat:$("#bKarat").value,gross:num("bGross"),nag:num("bNag"),wastage:num("bWast"),mazType:$("#bMazType").value,mazRate:num("bMaz"),nagPrice:num("bNagP")}}
 function pickTag(){const s=S.stock.find(x=>x.tag==$("#bTag").value);if(!s)return;$("#bName").value=s.name;$("#bKarat").value=s.karat;$("#bGross").value=s.gross;$("#bNag").value=s.nag;const x=stockItem(s);$("#bWast").value=x.wastage;$("#bMazType").value=x.mazType;$("#bMaz").value=x.mazRate;live()}
 /* Full weight breakdown (used in Stock > Add New Item) */
@@ -420,7 +425,8 @@ function saveBill(){
   const x=billTotals(),cid=+$("#bCust").value;
   if(x.baqi>0&&!cid){toast(t("pickCust"));return}
   const gold=cart.reduce((a,it)=>a+itemCalc(it).goldWt,0);
-  const bill={no:S.nextBill++,date:today(),cid,total:x.total,paid:x.paid,gold,items:cart.map(it=>({...it,calc:itemCalc(it)})),old:oldGold?{...oldGold,val:x.ov}:null,disc:x.disc,sub:x.sub};
+  const bill={no:S.nextBill++,date:today(),cid,total:x.total,paid:x.paid,gold,items:cart.map(it=>({...it,calc:itemCalc(it)})),old:oldGold?{...oldGold,val:x.ov}:null,disc:x.disc,sub:x.sub,
+    custName:$("#bCName").value.trim(),custPhone:$("#bCPhone").value.trim(),rates:Object.fromEntries(KARATS.map(k=>[k,rateOf(k)]))};
   S.bills.push(bill);
   cart.forEach(it=>{const s=S.stock.find(y=>y.tag==it.tag);if(s)s.sold=true});
   if(x.baqi>0)S.ledger.push({cid,date:today(),amt:x.baqi,note:`Balance of bill #${bill.no}`});
@@ -430,6 +436,7 @@ function saveBill(){
 /* ===== RECEIPT (Urdu + English on every bill) ===== */
 function showReceipt(b){
   const st=S.settings,c=cust(b.cid);
+  const CB=(ur,en,v)=>`<div class="cb"><small><span class="ur">${ur}</span> ${en}</small><b>${v}</b></div>`;
   const L=(ur,en,v,cls="")=>`<div class="line ${cls}"><span><span class="ur">${ur}</span> <small style="color:#7a6f5a">${en}</small></span><span class="num">${v}</span></div>`;
   const ov=document.createElement("div");ov.className="overlay";ov.onclick=e=>{if(e.target==ov)ov.remove()};
   ov.innerHTML=`<div class="modal"><div class="row"><h2>${t("bill")} #${b.no}</h2><span class="spacer"></span><button class="btn ghost sm" onclick="this.closest('.overlay').remove()">${t("close")}</button></div>
@@ -437,7 +444,14 @@ function showReceipt(b){
    ${st.owner||st.phone?`<div style="text-align:center;font-weight:600;font-size:.85rem;margin-top:4px">${st.owner?esc(st.owner):""}${st.owner&&st.phone?" · ":""}${st.phone?`<span class="num">📞 ${esc(st.phone)}</span>`:""}</div>`:""}
    ${st.address?`<div style="text-align:center;font-size:.75rem;color:#7a6f5a">${esc(st.address)}</div>`:""}
    <div class="ur" style="text-align:center;font-size:1.1rem;margin:6px 0">رسید</div>
-   ${L("گاہک","Customer",esc(c?.name||"Walk-in"))}${L("تاریخ","Date",fmtD(b.date))}
+   <div class="custbox">
+    ${CB("گاہک","Customer",esc(b.custName||c?.name||"Walk-in"))}
+    ${CB("موبائل","Mobile",`<span class="num">${esc(b.custPhone||c?.phone||"—")}</span>`)}
+    ${CB("بل نمبر","Bill No",`<span class="num">#${b.no}</span>`)}
+    ${CB("تاریخ","Date",fmtD(b.date))}
+    <div class="cb-rate"><span><span class="ur">آج کا ریٹ</span> <small>Today's Gold Rate (per tola)</small></span>
+     <span class="num">${[...new Set(["24K",...(b.items||[]).map(i=>i.karat)])].filter(k=>KARATS.includes(k)).map(k=>`${k}: ${rs((b.rates||{})[k]||rateOf(k))}`).join(" · ")}</span></div>
+   </div>
    ${(b.items||[]).map(it=>`<div style="margin-top:8px;font-weight:600;font-size:.85rem">${esc(it.name)} · ${it.karat}</div>
      ${L("خالص وزن","Net weight",g(it.calc.net))}${L("چھیجت","Wastage "+(it.wastage||0)+"%",g(it.calc.wast))}${L("ٹوٹل وزن","Total weight",`${g(it.calc.goldWt)} (${tmr(it.calc.goldWt)})`)}${L("سونا","Gold",rs(it.calc.goldVal))}${L("مزدوری","Making",rs(it.calc.maz))}${it.nagPrice?L("نگ","Stone",rs(it.nagPrice)):""}`).join("")}
    ${b.old?L("پرانا سونا","Old gold",`− ${rs(b.old.val)}`):""}${b.disc?L("رعایت","Discount",`− ${rs(b.disc)}`):""}
